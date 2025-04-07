@@ -15,6 +15,14 @@ An interactive web dashboard for **Amar Infâncias**, a family photography busin
 
 🐍 <a href="https://github.com/andy-oliv/AMAR_contractGUI">AMAR_contractGUI (Python desktop app)</a>
 
+## 📁 Folder structure
+
+```Bash
+Amar/ #main folder
+├── amar-api/      # Backend (NestJS)
+└── frontend/      # Frontend (React)
+```
+
 ## 🚀 Technologies Used
 
 <div>
