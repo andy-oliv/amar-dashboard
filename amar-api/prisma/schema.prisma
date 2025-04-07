@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+  name String @db.VarChar(50)
+  email String @db.VarChar(120)
+  password String @db.VarChar(255)
+  pictureUrl String @db.VarChar(200)
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Client {
+  id String @id @default(uuid())
+  name String @db.VarChar(50)
+  email String @db.VarChar(120) @unique
+  address String @db.VarChar(100)
+  neighborhood String @db.VarChar(100)
+  city String @db.VarChar(100) 
+  cpf String @db.VarChar(11) @unique
+  contracts clientContract[]
+  notifications Notification[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Contract {
+  id String @id @default(uuid())
+  name String @db.VarChar(100)
+  type ContractType 
+  address String @db.VarChar(100)
+  neighborhood String @db.VarChar(100)
+  city String @db.VarChar(100)
+  date DateTime @db.Date
+  eventStartTime DateTime @db.Time()
+  commutingFee Float @db.Double
+  discountPercentage Float
+  paymentDueDate DateTime @db.Date
+  observations String @db.Text
+  fileUrl String? @db.VarChar(255)
+  clients clientContract[]
+  paymentType PaymentType @relation(fields: [paymentTypeId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  paymentTypeId Int 
+  package Package @relation(fields: [packageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  packageId Int
+  isSigned SignatureStatus @default(PENDING)
+  isPaid PaymentStatus @default(PENDING)
+  generalStatus GeneralStatus @default(SCHEDULED)
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model clientContract {
+  client Client @relation(fields: [clientId], references: [id])
+  clientId String 
+  contract Contract @relation(fields: [contractId], references: [id])
+  contractId String
+  assignedAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+
+  @@id([clientId, contractId])
+}
+
+model Notification {
+  id        String            @id @default(uuid())
+  title     String            @db.VarChar(100)
+  message   String            @db.Text
+  isRead    Boolean           @default(false)
+  type      NotificationType
+  client    Client            @relation(fields: [clientId], references: [id])
+  clientId  String
+  createdAt DateTime          @default(now())
+}
+
+model PaymentType {
+  id Int @id @default(autoincrement())
+  name PaymentTypeName
+  contracts Contract[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Package {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(20)
+  pixPrice Float @db.Double
+  cardPrice Float @db.Double
+  contracts Contract[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+enum ContractType {
+  PHOTOSHOOT
+  EVENT
+}
+
+enum PaymentTypeName {
+  PIX
+  CREDIT_CARD
+}
+
+enum SignatureStatus {
+  SIGNED
+  PENDING
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+}
+
+enum NotificationType {
+  CONTRACT_CREATED
+  CONTRACT_SIGNED
+  PAYMENT_CONFIRMED
+  CUSTOM
+}
+
+enum GeneralStatus {
+  SCHEDULED
+  EDITING
+  COMPLETED
+  CANCELLED
+}
