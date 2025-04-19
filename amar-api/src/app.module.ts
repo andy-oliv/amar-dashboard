@@ -10,6 +10,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientModule } from './client/client.module';
+import { UserModule } from './user/user.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import { ClientModule } from './client/client.module';
     ]),
     PrismaModule,
     ClientModule,
+    UserModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }, AppService],

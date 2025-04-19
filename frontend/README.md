@@ -4,10 +4,11 @@ Web interface of Amar Infâncias' dashboard built with [React](https://reactjs.o
 
 ## 🚀 Technologies
 
-- [React](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Vite](https://vitejs.dev/)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=flat&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=flat&logo=vite&logoColor=white)
+![React](https://img.shields.io/badge/zustand-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB)
 
 ## 🛠️ How to set up locally
 

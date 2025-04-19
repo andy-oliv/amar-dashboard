@@ -10,6 +10,7 @@ import Client from '../interfaces/Client';
 import { checkClientExists } from '../helpers/client.helper';
 import generateTimestamp from '../helpers/generateTimestamp';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
+import LOGGER_MESSAGES from '../utils/messages/loggerMessages';
 
 @Injectable()
 export class ClientService {
@@ -30,11 +31,10 @@ export class ClientService {
       const timestamp: string = generateTimestamp();
 
       this.logger.error({
-        message: 'Client already exists in the database',
+        message: LOGGER_MESSAGES.error.client.createClient.conflict,
         clientData: {
           name: clientInfo.name,
           email: clientInfo.email,
-          cpf: clientInfo.cpf,
         },
         pid: process.pid,
         timestamp: timestamp,
@@ -60,7 +60,7 @@ export class ClientService {
       const timestamp: string = generateTimestamp();
 
       this.logger.error({
-        message: 'An error occurred during the creation of the new client.',
+        message: LOGGER_MESSAGES.error.client.createClient.internalError,
         code: error.code,
         error,
         pid: process.pid,
@@ -83,7 +83,7 @@ export class ClientService {
         const timestamp: string = generateTimestamp();
 
         this.logger.log({
-          message: 'There are no clients to show.',
+          message: LOGGER_MESSAGES.log.client.fetchClients,
           pid: process.pid,
           timestamp,
         });
@@ -107,7 +107,7 @@ export class ClientService {
       }
 
       this.logger.error({
-        message: 'An error occurred while fetching the clients.',
+        message: LOGGER_MESSAGES.error.client.fetchClients.internalError,
         code: error.code,
         error,
         pid: process.pid,
@@ -116,6 +116,50 @@ export class ClientService {
 
       throw new InternalServerErrorException({
         message: HTTP_MESSAGES.EN.generalMessages.status_500,
+        pid: process.pid,
+        timestamp,
+      });
+    }
+  }
+
+  async fetchClient(
+    clientId: string,
+  ): Promise<{ message: string; data: Client }> {
+    try {
+      const client: Client = await this.prismaService.client.findUnique({
+        where: {
+          id: clientId,
+        },
+      });
+
+      if (!client) {
+        const timestamp: string = generateTimestamp();
+
+        this.logger.log({
+          message: LOGGER_MESSAGES.log.client.fetchClient.notFound,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.client.fetchClient.status_404,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+      return {
+        message: HTTP_MESSAGES.EN.client.fetchClient.status_200,
+        data: client,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      const timestamp: string = generateTimestamp();
+
+      this.logger.log({
+        message: LOGGER_MESSAGES.log.client.fetchClient.notFound,
         pid: process.pid,
         timestamp,
       });

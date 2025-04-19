@@ -30,6 +30,14 @@ const VALIDATION_MESSAGES = {
         },
       },
     },
+    role: {
+      createRoleDTO: {
+        title: {
+          isNotEmpty: 'The title field cannot be empty.',
+          isString: 'The title field needs to be a string.',
+        },
+      },
+    },
   },
 };
 

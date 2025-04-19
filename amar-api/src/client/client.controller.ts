@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ClientService } from './client.service';
 import CreateClientDTO from './dto/CreateClientDTO';
@@ -56,5 +63,12 @@ export class ClientController {
   })
   async fetchClients(): Promise<{ message: string; data: Client[] }> {
     return this.clientService.fetchClients();
+  }
+
+  @Get(':id')
+  async fetchClient(
+    @Param('id', new ParseUUIDPipe()) { id }: Partial<Client>,
+  ): Promise<{ message: string; data: Client }> {
+    return this.clientService.fetchClient(id);
   }
 }

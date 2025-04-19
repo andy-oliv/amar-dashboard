@@ -10,11 +10,33 @@ datasource db {
 model User {
   id String @id @default(uuid())
   name String @db.VarChar(50)
-  email String @db.VarChar(120)
-  password String @db.VarChar(255)
-  pictureUrl String @db.VarChar(200)
+  email String @db.VarChar(120) @unique
+  hashedPassword String @db.VarChar(255)
+  pictureUrl String? @db.VarChar(200)
+  notifications Notification[]
+  roles UserRole[]
+  classes YogaClass[]
+  videoContracts Contract[]
+  photoContracts ContractPhotographer[]
   createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
   updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Role {
+  id String @id @default(uuid())
+  title String @db.VarChar(50)
+  users UserRole[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model UserRole {
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  roleId String
+  
+  @@id([userId, roleId])
 }
 
 model Client {
@@ -25,8 +47,102 @@ model Client {
   neighborhood String @db.VarChar(100)
   city String @db.VarChar(100) 
   cpf String @db.VarChar(11) @unique
-  contracts clientContract[]
+  children Family[]
+  contracts ClientContract[]
+  yogaClasses YogaAdultStudent[]
+  presences Presence[]
   notifications Notification[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Child {
+  id String @id @default(uuid())
+  name String @db.VarChar(50)
+  parents Family[]
+  yogaClasses YogaChildStudent[]
+  presences Presence[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Family {
+  client Client @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  clientId String 
+  child Child @relation(fields: [childId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  childId String
+
+  @@id([clientId, childId])
+}
+
+model YogaClass {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  type YogaClassType
+  status YogaClassStatus
+  location Location? @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  locationId Int?
+  date DateTime @db.DateTime()
+  price Float @db.Double
+  instructor User @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  instructorId String
+  adultStudents YogaAdultStudent[]
+  childStudents YogaChildStudent[]
+  rollCall RollCall?
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Location {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  address String @db.VarChar(100)
+  neighborhood String @db.VarChar(100)
+  city String @db.VarChar(100)
+  classes YogaClass[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model YogaChildStudent {
+  yogaClass YogaClass @relation(fields: [yogaClassId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  yogaClassId Int
+  student Child @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  studentId String
+
+  @@id([yogaClassId, studentId])
+}
+
+model YogaAdultStudent {
+  yogaClass YogaClass @relation(fields: [yogaClassId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  yogaClassId Int
+  student Client @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  studentId String
+
+  @@id([yogaClassId, studentId])
+}
+
+model RollCall {
+  id Int @id @default(autoincrement())
+  class YogaClass @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  classId Int @unique
+  date DateTime @db.DateTime()
+  presences Presence[]
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+model Presence {
+  id Int @id @default(autoincrement())
+  studentType StudentType
+  rollCall RollCall @relation(fields: [rollCallId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  rollCallId Int
+  adultStudent Client? @relation(fields: [adultStudentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  adultStudentId String?
+  childStudent Child? @relation(fields: [childStudentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  childStudentId String?
+  isPresent Boolean
+  absenceReason String? @db.Text
   createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
   updatedAt DateTime @updatedAt @db.Timestamp(0)
 }
@@ -45,10 +161,13 @@ model Contract {
   paymentDueDate DateTime @db.Date
   observations String @db.Text
   fileUrl String? @db.VarChar(255)
-  clients clientContract[]
-  paymentType PaymentType @relation(fields: [paymentTypeId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  clients ClientContract[]
+  photographers ContractPhotographer[]
+  videomaker User? @relation(fields: [videomakerId], references: [id])
+  videomakerId String?
+  paymentType PaymentType @relation(fields: [paymentTypeId], references: [id], onUpdate: Cascade, onDelete: NoAction)
   paymentTypeId Int 
-  package Package @relation(fields: [packageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  package Package @relation(fields: [packageId], references: [id], onUpdate: Cascade, onDelete: NoAction)
   packageId Int
   isSigned SignatureStatus @default(PENDING)
   isPaid PaymentStatus @default(PENDING)
@@ -57,10 +176,19 @@ model Contract {
   updatedAt DateTime @updatedAt @db.Timestamp(0)
 }
 
-model clientContract {
-  client Client @relation(fields: [clientId], references: [id])
-  clientId String 
+model ContractPhotographer {
+  photographer User @relation(fields: [photographerId], references: [id])
+  photographerId String
   contract Contract @relation(fields: [contractId], references: [id])
+  contractId String
+
+  @@id([photographerId, contractId])
+}
+
+model ClientContract {
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  clientId String 
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   contractId String
   assignedAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
 
@@ -73,9 +201,12 @@ model Notification {
   message   String            @db.Text
   isRead    Boolean           @default(false)
   type      NotificationType
-  client    Client            @relation(fields: [clientId], references: [id])
-  clientId  String
-  createdAt DateTime          @default(now())
+  client    Client?            @relation(fields: [clientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  clientId  String?
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String?
+  createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
 }
 
 model PaymentType {
@@ -94,6 +225,23 @@ model Package {
   contracts Contract[]
   createdAt DateTime @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
   updatedAt DateTime @updatedAt @db.Timestamp(0)
+}
+
+enum YogaClassType {
+  ADULTS
+  CHILDREN
+}
+
+enum YogaClassStatus {
+  SCHEDULED
+  CANCELLED
+  DONE
+  RESCHEDULED
+}
+
+enum StudentType {
+  ADULT
+  CHILD
 }
 
 enum ContractType {
@@ -120,6 +268,10 @@ enum NotificationType {
   CONTRACT_CREATED
   CONTRACT_SIGNED
   PAYMENT_CONFIRMED
+  EVENT_FINISHED
+  CLASS_FINISHED
+  EVENT_TIME
+  CLASS_TIME
   CUSTOM
 }
 
