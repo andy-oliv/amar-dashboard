@@ -27,8 +27,6 @@ export class RoleService {
       roleInfo,
     );
 
-    this.logger.log(roleExists);
-
     if (roleExists) {
       const timestamp: string = generateTimestamp();
 
@@ -140,10 +138,50 @@ export class RoleService {
   }
 
   async fetchRole(id: string): Promise<EndpointReturn> {
-    this.logger.log(id);
-    const role: Role = await getRole(this.prismaService, this.logger, id);
+    try {
+      const fetchedRole: Role = await this.prismaService.role.findUniqueOrThrow(
+        {
+          where: {
+            id,
+          },
+        },
+      );
 
-    return { message: HTTP_MESSAGES.EN.role.fetchRole.status_200, data: role };
+      return {
+        message: HTTP_MESSAGES.EN.role.fetchRole.status_200,
+        data: fetchedRole,
+      };
+    } catch (error) {
+      const timestamp: string = generateTimestamp();
+
+      if (error.code === 'P2025') {
+        this.logger.log({
+          message: LOGGER_MESSAGES.log.role.fetchRole.notFound,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.role.fetchRole.status_404,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+
+      this.logger.error({
+        message: LOGGER_MESSAGES.error.role.fetchRole,
+        code: error.code,
+        error,
+        pid: process.pid,
+        timestamp,
+      });
+
+      throw new InternalServerErrorException({
+        message: HTTP_MESSAGES.EN.generalMessages.status_500,
+        pid: process.pid,
+        timestamp,
+      });
+    }
   }
 
   async updateRole(updatedData: Role): Promise<EndpointReturn> {

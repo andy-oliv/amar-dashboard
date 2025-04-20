@@ -15,7 +15,7 @@ import CreateRoleDTO from './dto/createRoleDTO';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
 
 @ApiTags('Roles')
-@Controller('role')
+@Controller('roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
@@ -110,7 +110,7 @@ export class RoleController {
   async updateRole(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() { title }: CreateRoleDTO,
-  ) {
+  ): Promise<EndpointReturn> {
     return this.roleService.updateRole({ id, title });
   }
 

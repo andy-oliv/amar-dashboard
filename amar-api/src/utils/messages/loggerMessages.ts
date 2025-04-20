@@ -23,6 +23,10 @@ const LOGGER_MESSAGES = {
         internalError:
           'An error occurred while fetching the roles. Check the error log to find more information.',
       },
+      fetchRole: {
+        internalError:
+          'An error occurred while fetching the role. Check the error log to find more information.',
+      },
       updateRole: {
         internalError:
           'An error occurred while updating the role. Check the error log to find more information.',
