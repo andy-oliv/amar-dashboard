@@ -13,6 +13,7 @@ import { RoleService } from './role.service';
 import EndpointReturn from '../interfaces/EndpointReturn';
 import CreateRoleDTO from './dto/createRoleDTO';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
+import VALIDATION_MESSAGES from '../utils/messages/validationMessages';
 
 @ApiTags('Roles')
 @Controller('roles')
@@ -44,6 +45,11 @@ export class RoleController {
     status: 200,
     description: 'Success',
     example: HTTP_MESSAGES.EN.role.fetchRoles.status_200,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    example: VALIDATION_MESSAGES.EN.role.createRoleDTO.title,
   })
   @ApiResponse({
     status: 404,

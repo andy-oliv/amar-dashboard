@@ -3,7 +3,7 @@ import {
   GeneralStatus,
   PaymentStatus,
   SignatureStatus,
-} from '@prisma/client';
+} from '../../prisma/generated/prisma-client-js';
 
 export default interface Contract {
   id?: string;

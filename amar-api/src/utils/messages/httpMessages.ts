@@ -39,6 +39,28 @@ const HTTP_MESSAGES = {
         status_200: 'Role successfully deleted.',
       },
     },
+    user: {
+      createUser: {
+        status_201: 'User successfully registered.',
+        status_409: 'This user has already been registered.',
+      },
+      fetchUsers: {
+        status_200: 'User list successfully found.',
+        status_404: 'No users were found.',
+      },
+      fetchUser: {
+        status_200: 'User successfully found.',
+        status_404: 'User not found.',
+      },
+      updateUser: {
+        status_200: 'User successfully updated.',
+        status_404: 'User not found.',
+      },
+      deleteUser: {
+        status_200: 'User successfully deleted.',
+        status_404: 'The user was not found.',
+      },
+    },
   },
 };
 

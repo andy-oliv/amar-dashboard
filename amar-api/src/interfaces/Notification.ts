@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client';
+import { NotificationType } from '../../prisma/generated/prisma-client-js';
 
 export default interface Notification {
   id?: string;

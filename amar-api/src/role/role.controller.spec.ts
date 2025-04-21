@@ -5,7 +5,6 @@ import CreateRoleDTO from './dto/createRoleDTO';
 import generateMockRole from '../utils/mocks/generateMockRole';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
 import EndpointReturn from '../interfaces/EndpointReturn';
-import { BadRequestException } from '@nestjs/common';
 import Role from '../interfaces/Role';
 
 describe('RoleController', () => {

@@ -77,7 +77,8 @@ export class RoleService {
       this.logger.error({
         message: LOGGER_MESSAGES.error.role.createRole.internalError,
         code: error.code,
-        error,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });
@@ -124,7 +125,8 @@ export class RoleService {
       this.logger.error({
         message: LOGGER_MESSAGES.error.role.fetchRoles.internalError,
         code: error.code,
-        error: error,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });
@@ -171,7 +173,8 @@ export class RoleService {
       this.logger.error({
         message: LOGGER_MESSAGES.error.role.fetchRole,
         code: error.code,
-        error,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });
@@ -211,7 +214,8 @@ export class RoleService {
       this.logger.error({
         message: LOGGER_MESSAGES.error.role.updateRole.internalError,
         code: error.code,
-        error,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });
@@ -241,7 +245,8 @@ export class RoleService {
       this.logger.error({
         message: LOGGER_MESSAGES.error.role.deleteRole.internalError,
         code: error.code,
-        error,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });

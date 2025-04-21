@@ -36,6 +36,34 @@ const LOGGER_MESSAGES = {
           'An error occurred while deleting the role. Check the error log to find more information.',
       },
     },
+    user: {
+      createUser: {
+        conflict: 'The email that was sent already exists in the database.',
+        internalError:
+          'An error occurred while registering the user. Check the error log to find more information.',
+        internalConnectionError:
+          'An error occurred while connecting the user and the roles. Check the error log to find more information.',
+      },
+      deleteUser: {
+        notFound:
+          'The ID is not valid or there is no user with the provided ID.',
+        internalError:
+          'An error occurred while deleting the user. Check the error log to find more information.',
+      },
+      fetchUsers: {
+        internalError:
+          'An error occurred while fetching the users. Check the error log to find more information.',
+      },
+      fetchUser: {
+        internalError:
+          'An error occurred while fetching the user. Check the error log to find more information.',
+      },
+      updateUser: {
+        internalError:
+          'An error occurred while updating the user. Check the error log to find more information.',
+        notFound: 'The user was not found or the ID is incorrect.',
+      },
+    },
   },
   log: {
     client: {
@@ -55,6 +83,20 @@ const LOGGER_MESSAGES = {
       },
       fetchRole: {
         notFound: 'No role was found with the given ID.',
+      },
+    },
+    user: {
+      createUser: {
+        success: 'A new user has been registered.',
+      },
+      deleteUser: {
+        success: 'A user has been deleted.',
+      },
+      fetchUsers: {
+        notFound: 'There are no users to show.',
+      },
+      fetchUser: {
+        notFound: 'The user was not found or the ID is incorrect',
       },
     },
   },

@@ -11,7 +11,7 @@ import { checkRoleExists, getRole } from '../helpers/role.helper';
 import LOGGER_MESSAGES from '../utils/messages/loggerMessages';
 import generateTimestamp from '../helpers/generateTimestamp';
 import { NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../prisma/generated/prisma-client-js';
 
 jest.mock('uuid');
 jest.mock('../helpers/role.helper');

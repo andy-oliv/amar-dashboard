@@ -38,6 +38,52 @@ const VALIDATION_MESSAGES = {
         },
       },
     },
+    user: {
+      createUserDTO: {
+        name: {
+          isNotEmpty: 'The field name cannot be empty.',
+          isString: 'The field name needs to be a string.',
+        },
+        email: {
+          isNotEmpty: 'The field email cannot be empty.',
+          isEmail:
+            'The field email needs to be a valid email following the format: johndoe@mail.com',
+        },
+        password: {
+          isNotEmpty: 'The field password cannot be empty.',
+          isStrongPassword:
+            'The field password needs to be a strong password that contains at least 8 characters, 1 symbol, 1 lowercase letter, 1 uppercase letter and 1 number. ',
+        },
+        pictureUrl: {
+          isString: 'The field pictureUrl must be a string.',
+        },
+        roleId: {
+          isUUID: 'The roleId must be in UUID format.',
+        },
+      },
+      updateUserDTO: {
+        name: {
+          isNotEmpty: 'The field name cannot be empty.',
+          isString: 'The field name needs to be a string.',
+        },
+        email: {
+          isNotEmpty: 'The field email cannot be empty.',
+          isEmail:
+            'The field email needs to be a valid email following the format: johndoe@mail.com',
+        },
+        password: {
+          isNotEmpty: 'The field password cannot be empty.',
+          isStrongPassword:
+            'The field password needs to be a strong password that contains at least 8 characters, 1 symbol, 1 lowercase letter, 1 uppercase letter and 1 number. ',
+        },
+        pictureUrl: {
+          isString: 'The field pictureUrl must be a string.',
+        },
+        roleId: {
+          isUUID: 'The roleId must be in UUID format.',
+        },
+      },
+    },
   },
 };
 
