@@ -19,6 +19,19 @@ export async function checkUserExists(
   return !!userExists;
 }
 
+export async function findUser(
+  prismaService: PrismaService,
+  id: string,
+): Promise<User> {
+  const user: User = await prismaService.user.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  return user;
+}
+
 export async function generateHash(password: string): Promise<string> {
   const hashedPassword: string = await bcrypt.hash(password, 12);
 

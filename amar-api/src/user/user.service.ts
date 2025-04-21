@@ -12,6 +12,7 @@ import { User } from '../interfaces/User';
 import {
   checkUserExists,
   connectUserRole,
+  findUser,
   generateHash,
 } from '../helpers/user.helper';
 import generateTimestamp from '../helpers/generateTimestamp';
@@ -213,12 +214,12 @@ export class UserService {
   }
 
   async updateUser(updatedData: Partial<User>): Promise<EndpointReturn> {
-    const userExists: boolean = await checkUserExists(
-      this.prismaService,
-      updatedData.email,
-    );
+    this.logger.log(updatedData.id);
+    const foundUser: User = await findUser(this.prismaService, updatedData.id);
 
-    if (!userExists) {
+    this.logger.log(foundUser);
+
+    if (!foundUser) {
       const timestamp: string = generateTimestamp();
 
       this.logger.error({
