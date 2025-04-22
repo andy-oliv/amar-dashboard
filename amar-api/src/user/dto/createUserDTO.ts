@@ -67,7 +67,7 @@ export default class CreateUserDTO {
   @IsString({
     message: VALIDATION_MESSAGES.EN.user.createUserDTO.pictureUrl.isString,
   })
-  pictureUrl: string;
+  pictureUrl?: string;
 
   @ApiProperty({
     title: 'Role ID',
@@ -80,5 +80,5 @@ export default class CreateUserDTO {
     each: true,
     message: VALIDATION_MESSAGES.EN.user.createUserDTO.roleId.isUUID,
   })
-  roleId: string[];
+  roleId?: string[];
 }

@@ -9,21 +9,16 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Logger } from 'nestjs-pino';
 import { UserService } from './user.service';
 import EndpointReturn from '../interfaces/EndpointReturn';
 import CreateUserDTO from './dto/createUserDTO';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
-import VALIDATION_MESSAGES from '../utils/messages/validationMessages';
 import UpdateUserDTO from './dto/updateUserDTO';
 
 @ApiTags('User')
 @Controller('users')
 export class UserController {
-  constructor(
-    private readonly logger: Logger,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   @ApiResponse({

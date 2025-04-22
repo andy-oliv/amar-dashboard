@@ -19,7 +19,7 @@ export default class UpdateUserDTO {
   @IsString({
     message: VALIDATION_MESSAGES.EN.user.updateUserDTO.name.isString,
   })
-  name: string;
+  name?: string;
 
   @ApiProperty({
     title: 'Email',
@@ -32,7 +32,7 @@ export default class UpdateUserDTO {
     {},
     { message: VALIDATION_MESSAGES.EN.user.updateUserDTO.email.isEmail },
   )
-  email: string;
+  email?: string;
 
   @ApiProperty({
     title: 'Password',
@@ -48,7 +48,7 @@ export default class UpdateUserDTO {
         VALIDATION_MESSAGES.EN.user.updateUserDTO.password.isStrongPassword,
     },
   )
-  password: string;
+  password?: string;
 
   @ApiProperty({
     title: 'Picture URL',
@@ -60,7 +60,7 @@ export default class UpdateUserDTO {
   @IsString({
     message: VALIDATION_MESSAGES.EN.user.updateUserDTO.pictureUrl.isString,
   })
-  pictureUrl: string;
+  pictureUrl?: string;
 
   @ApiProperty({
     title: 'Role ID',
@@ -73,5 +73,5 @@ export default class UpdateUserDTO {
     each: true,
     message: VALIDATION_MESSAGES.EN.user.updateUserDTO.roleId.isUUID,
   })
-  roleId: string[];
+  roleId?: string[];
 }

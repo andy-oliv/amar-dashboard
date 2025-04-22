@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -32,8 +31,6 @@ export class UserService {
       this.prismaService,
       userData.email,
     );
-
-    this.logger.log(userExists);
 
     if (userExists) {
       const timestamp: string = generateTimestamp();
@@ -88,7 +85,13 @@ export class UserService {
 
       return {
         message: HTTP_MESSAGES.EN.user.createUser.status_201,
-        data: newUser,
+        data: {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          password: userData.password,
+          pictureUrl: newUser.pictureUrl,
+        },
       };
     } catch (error) {
       const timestamp: string = generateTimestamp();
@@ -214,10 +217,7 @@ export class UserService {
   }
 
   async updateUser(updatedData: Partial<User>): Promise<EndpointReturn> {
-    this.logger.log(updatedData.id);
     const foundUser: User = await findUser(this.prismaService, updatedData.id);
-
-    this.logger.log(foundUser);
 
     if (!foundUser) {
       const timestamp: string = generateTimestamp();
@@ -235,6 +235,12 @@ export class UserService {
       });
     }
 
+    let hash: string = '';
+
+    if (updatedData.password) {
+      hash = await generateHash(updatedData.password);
+    }
+
     try {
       await connectUserRole(
         this.prismaService,
@@ -250,7 +256,7 @@ export class UserService {
         data: {
           name: updatedData.name,
           email: updatedData.email,
-          password: updatedData.password,
+          password: hash,
           pictureUrl: updatedData.pictureUrl,
         },
         include: {
