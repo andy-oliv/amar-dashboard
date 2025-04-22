@@ -9,6 +9,10 @@ const HTTP_MESSAGES = {
         status_201: 'Client successfully created.',
         status_409: 'This client has already been registered.',
       },
+      deleteClient: {
+        status_200: 'Client successfully deleted.',
+        status_404: 'Client not found.',
+      },
       fetchClients: {
         status_200: 'Clients successfully returned.',
         status_404: 'There are no clients to show.',
@@ -16,6 +20,10 @@ const HTTP_MESSAGES = {
       fetchClient: {
         status_200: 'Client successfully found.',
         status_404: 'Client not found.',
+      },
+      updateClient: {
+        status_200: 'Client successfully updated.',
+        status_404: 'client not found.',
       },
     },
     role: {

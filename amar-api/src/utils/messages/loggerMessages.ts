@@ -7,9 +7,19 @@ const LOGGER_MESSAGES = {
         internalError:
           'An unexpected error ocurred during the creation of the new client in the database. Check the error log to find more information.',
       },
+      deleteClient: {
+        notFound: 'The ID is invalid or the client was not found.',
+        internalError:
+          'An error occurred while deleting the client. Check the error log to find more information.',
+      },
       fetchClients: {
         internalError:
           'An error occurred while fetching the clients. Check the error log to find more information.',
+      },
+      updateClient: {
+        notFound: 'The ID is invalid or the client was not found.',
+        internalError:
+          'An error occurred while updating the client. Check the error log to find more information.',
       },
     },
     role: {
@@ -67,6 +77,12 @@ const LOGGER_MESSAGES = {
   },
   log: {
     client: {
+      createClient: {
+        success: 'Client successfully created.',
+      },
+      deleteClient: {
+        success: 'Client successfully deleted.',
+      },
       fetchClients: {
         notFound: 'There are no registered clients in the database',
       },
