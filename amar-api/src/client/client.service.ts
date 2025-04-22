@@ -130,6 +130,13 @@ export class ClientService {
         where: {
           id: clientId,
         },
+        include: {
+          children: true,
+          yogaClasses: true,
+          presences: true,
+          contracts: true,
+          notifications: true,
+        },
       });
 
       if (!client) {
