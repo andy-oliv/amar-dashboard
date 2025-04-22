@@ -8,7 +8,6 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
 import { ClientService } from './client.service';
 import CreateClientDTO from './dto/CreateClientDTO';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -20,10 +19,7 @@ import updateClientDTO from './dto/updateClientDTO';
 @ApiTags('Client')
 @Controller('clients')
 export class ClientController {
-  constructor(
-    private readonly logger: Logger,
-    private readonly clientService: ClientService,
-  ) {}
+  constructor(private readonly clientService: ClientService) {}
 
   @Post()
   @ApiResponse({

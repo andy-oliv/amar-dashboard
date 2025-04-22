@@ -73,7 +73,8 @@ export class ClientService {
       this.logger.error({
         message: LOGGER_MESSAGES.error.client.createClient.internalError,
         code: error.code,
-        error,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });
@@ -94,7 +95,7 @@ export class ClientService {
         const timestamp: string = generateTimestamp();
 
         this.logger.log({
-          message: LOGGER_MESSAGES.log.client.fetchClients,
+          message: LOGGER_MESSAGES.log.client.fetchClients.notFound,
           pid: process.pid,
           timestamp,
         });
@@ -120,7 +121,8 @@ export class ClientService {
       this.logger.error({
         message: LOGGER_MESSAGES.error.client.fetchClients.internalError,
         code: error.code,
-        error,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });
@@ -173,8 +175,11 @@ export class ClientService {
 
       const timestamp: string = generateTimestamp();
 
-      this.logger.log({
-        message: LOGGER_MESSAGES.log.client.fetchClient.notFound,
+      this.logger.error({
+        message: LOGGER_MESSAGES.error.client.fetchClient.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
         pid: process.pid,
         timestamp,
       });

@@ -12,6 +12,10 @@ const LOGGER_MESSAGES = {
         internalError:
           'An error occurred while deleting the client. Check the error log to find more information.',
       },
+      fetchClient: {
+        internalError:
+          'An error occurred while fetching the client. Check the error log to find more information.',
+      },
       fetchClients: {
         internalError:
           'An error occurred while fetching the clients. Check the error log to find more information.',
