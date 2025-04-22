@@ -67,7 +67,7 @@ export class ClientController {
 
   @Get(':id')
   async fetchClient(
-    @Param('id', new ParseUUIDPipe()) { id }: Partial<Client>,
+    @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<{ message: string; data: Client }> {
     return this.clientService.fetchClient(id);
   }

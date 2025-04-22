@@ -126,13 +126,21 @@ export class ClientService {
     clientId: string,
   ): Promise<{ message: string; data: Client }> {
     try {
-      const client: Client = await this.prismaService.client.findUnique({
+      const client: Client = await this.prismaService.client.findUniqueOrThrow({
         where: {
           id: clientId,
         },
       });
 
       if (!client) {
+        const timestamp: string = generateTimestamp();
+      }
+      return {
+        message: HTTP_MESSAGES.EN.client.fetchClient.status_200,
+        data: client,
+      };
+    } catch (error) {
+      if (error.code === 'P2025') {
         const timestamp: string = generateTimestamp();
 
         this.logger.log({
@@ -147,19 +155,17 @@ export class ClientService {
           timestamp,
         });
       }
-      return {
-        message: HTTP_MESSAGES.EN.client.fetchClient.status_200,
-        data: client,
-      };
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
 
       const timestamp: string = generateTimestamp();
 
       this.logger.log({
         message: LOGGER_MESSAGES.log.client.fetchClient.notFound,
+        pid: process.pid,
+        timestamp,
+      });
+
+      throw new InternalServerErrorException({
+        message: HTTP_MESSAGES.EN.generalMessages.status_500,
         pid: process.pid,
         timestamp,
       });
