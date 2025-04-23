@@ -12,7 +12,6 @@ import { checkChildExists } from '../helpers/child.helper';
 import generateTimestamp from '../helpers/generateTimestamp';
 import LOGGER_MESSAGES from '../utils/messages/loggerMessages';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
-import Client from '../interfaces/Client';
 import { validateParentIdsExist } from '../helpers/client.helper';
 
 @Injectable()
@@ -173,7 +172,7 @@ export class ChildService {
 
   async fetchChild(id: string): Promise<EndpointReturn> {
     try {
-      const children: Child[] = await this.prismaService.child.findMany({
+      const children: Child = await this.prismaService.child.findUniqueOrThrow({
         where: {
           id,
         },
@@ -192,7 +191,12 @@ export class ChildService {
         },
       });
 
-      if (children.length === 0) {
+      return {
+        message: HTTP_MESSAGES.EN.child.fetchChild.status_200,
+        data: children,
+      };
+    } catch (error) {
+      if (error.code === 'P2025') {
         const timestamp: string = generateTimestamp();
 
         this.logger.error({
@@ -206,15 +210,6 @@ export class ChildService {
           pid: process.pid,
           timestamp,
         });
-      }
-
-      return {
-        message: HTTP_MESSAGES.EN.child.fetchChild.status_200,
-        data: children,
-      };
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
       }
 
       const timestamp: string = generateTimestamp();

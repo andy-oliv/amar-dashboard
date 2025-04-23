@@ -29,5 +29,5 @@ export default class CreateChildDTO {
   @IsArray({
     message: VALIDATION_MESSAGES.EN.child.createChildDTO.parentId.isArray,
   })
-  parentId: string[];
+  parentId?: string[];
 }
