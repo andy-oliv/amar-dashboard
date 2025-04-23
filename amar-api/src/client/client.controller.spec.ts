@@ -20,7 +20,7 @@ describe('ClientController', () => {
             createClient: jest.fn(),
             fetchClients: jest.fn(),
             fetchClient: jest.fn(),
-            fetchClientByName: jest.fn(),
+            fetchClientsByName: jest.fn(),
             updateClient: jest.fn(),
             deleteClient: jest.fn(),
           },
@@ -79,25 +79,28 @@ describe('ClientController', () => {
     });
   });
 
-  describe('fetchClientByName', () => {
+  describe('fetchClientsByName', () => {
     it('should fetch a client', async () => {
       const client: Client = generateMockClient();
+      const clients: Client[] = [client];
 
-      (clientService.fetchClientByName as jest.Mock).mockResolvedValue({
-        message: HTTP_MESSAGES.EN.client.fetchClient.status_200,
-        data: client,
+      (clientService.fetchClientsByName as jest.Mock).mockResolvedValue({
+        message: HTTP_MESSAGES.EN.client.fetchClientsByName.status_200,
+        data: clients,
       });
 
-      const result: EndpointReturn = await clientController.fetchClientByName(
+      const result: EndpointReturn = await clientController.fetchClientsByName(
         client.name,
       );
 
       expect(result).toMatchObject({
-        message: HTTP_MESSAGES.EN.client.fetchClientByName.status_200,
-        data: client,
+        message: HTTP_MESSAGES.EN.client.fetchClientsByName.status_200,
+        data: clients,
       });
 
-      expect(clientService.fetchClientByName).toHaveBeenCalledWith(client.name);
+      expect(clientService.fetchClientsByName).toHaveBeenCalledWith(
+        client.name,
+      );
     });
   });
 

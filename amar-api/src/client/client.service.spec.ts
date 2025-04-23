@@ -346,24 +346,23 @@ describe('ClientService', () => {
     });
   });
 
-  describe('fetchClientByName()', () => {
+  describe('fetchClientsByName()', () => {
     it('should fetch a client', async () => {
       const client: Client = generateMockClient();
+      const clients: Client[] = [client];
 
-      (prismaService.client.findFirstOrThrow as jest.Mock).mockResolvedValue(
-        client,
-      );
+      (prismaService.client.findMany as jest.Mock).mockResolvedValue(clients);
 
-      const result: EndpointReturn = await clientService.fetchClientByName(
+      const result: EndpointReturn = await clientService.fetchClientsByName(
         client.name,
       );
 
       expect(result).toMatchObject({
-        message: HTTP_MESSAGES.EN.client.fetchClientByName.status_200,
-        data: client,
+        message: HTTP_MESSAGES.EN.client.fetchClientsByName.status_200,
+        data: clients,
       });
 
-      expect(prismaService.client.findFirstOrThrow).toHaveBeenCalledWith({
+      expect(prismaService.client.findMany).toHaveBeenCalledWith({
         where: {
           name: {
             contains: client.name,
@@ -397,20 +396,18 @@ describe('ClientService', () => {
           clientVersion: 'fake-client-version',
         });
 
-      (prismaService.client.findFirstOrThrow as jest.Mock).mockRejectedValue(
-        error,
-      );
+      (prismaService.client.findMany as jest.Mock).mockRejectedValue(error);
       (logger.log as jest.Mock).mockReturnValue({
-        message: LOGGER_MESSAGES.log.client.fetchClientByName.notFound,
+        message: LOGGER_MESSAGES.log.client.fetchClientsByName.notFound,
         pid: process.pid,
         timestamp,
       });
 
       await expect(
-        clientService.fetchClientByName(client.name),
-      ).rejects.toThrow(HTTP_MESSAGES.EN.client.fetchClientByName.status_404);
+        clientService.fetchClientsByName(client.name),
+      ).rejects.toThrow(HTTP_MESSAGES.EN.client.fetchClientsByName.status_404);
 
-      expect(prismaService.client.findFirstOrThrow).toHaveBeenCalledWith({
+      expect(prismaService.client.findMany).toHaveBeenCalledWith({
         where: {
           name: {
             contains: client.name,
@@ -446,11 +443,11 @@ describe('ClientService', () => {
       };
       const timestamp: string = 'mock-timestamp';
 
-      (prismaService.client.findFirstOrThrow as jest.Mock).mockRejectedValue(
+      (prismaService.client.findMany as jest.Mock).mockRejectedValue(
         'prismaValidationError',
       );
       (logger.error as jest.Mock).mockReturnValue({
-        message: LOGGER_MESSAGES.error.client.fetchClientByName.internalError,
+        message: LOGGER_MESSAGES.error.client.fetchClientsByName.internalError,
         code: error.code,
         error: error.message,
         stack: error.stack,
@@ -459,10 +456,10 @@ describe('ClientService', () => {
       });
 
       await expect(
-        clientService.fetchClientByName(client.name),
+        clientService.fetchClientsByName(client.name),
       ).rejects.toThrow(HTTP_MESSAGES.EN.generalMessages.status_500);
 
-      expect(prismaService.client.findFirstOrThrow).toHaveBeenCalledWith({
+      expect(prismaService.client.findMany).toHaveBeenCalledWith({
         where: {
           name: {
             contains: client.name,
