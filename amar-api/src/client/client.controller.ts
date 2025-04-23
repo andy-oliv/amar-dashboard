@@ -45,10 +45,10 @@ export class ClientController {
   }
 
   @Get()
-  async fetchClientByName(
-    @Query('clientName') clientName: string,
+  async fetchClientsByName(
+    @Query('name') name: string,
   ): Promise<EndpointReturn> {
-    return this.clientService.fetchClientByName(clientName);
+    return this.clientService.fetchClientsByName(name);
   }
 
   @Get()

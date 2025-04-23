@@ -201,12 +201,12 @@ export class ClientService {
     }
   }
 
-  async fetchClientByName(clientName: string): Promise<EndpointReturn> {
+  async fetchClientsByName(name: string): Promise<EndpointReturn> {
     try {
-      const client: Client = await this.prismaService.client.findFirstOrThrow({
+      const client: Client[] = await this.prismaService.client.findMany({
         where: {
           name: {
-            contains: clientName,
+            contains: name,
           },
         },
         include: {
@@ -228,7 +228,7 @@ export class ClientService {
       });
 
       return {
-        message: HTTP_MESSAGES.EN.client.fetchClientByName.status_200,
+        message: HTTP_MESSAGES.EN.client.fetchClientsByName.status_200,
         data: client,
       };
     } catch (error) {
@@ -236,13 +236,13 @@ export class ClientService {
         const timestamp: string = generateTimestamp();
 
         this.logger.log({
-          message: LOGGER_MESSAGES.log.client.fetchClientByName.notFound,
+          message: LOGGER_MESSAGES.log.client.fetchClientsByName.notFound,
           pid: process.pid,
           timestamp,
         });
 
         throw new NotFoundException({
-          message: HTTP_MESSAGES.EN.client.fetchClientByName.status_404,
+          message: HTTP_MESSAGES.EN.client.fetchClientsByName.status_404,
           pid: process.pid,
           timestamp,
         });
@@ -251,7 +251,7 @@ export class ClientService {
       const timestamp: string = generateTimestamp();
 
       this.logger.error({
-        message: LOGGER_MESSAGES.error.client.fetchClientByName.internalError,
+        message: LOGGER_MESSAGES.error.client.fetchClientsByName.internalError,
         code: error.code,
         error: error.message,
         stack: error.stack,
