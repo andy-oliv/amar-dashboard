@@ -243,6 +243,7 @@ describe('ClientService', () => {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
@@ -288,6 +289,7 @@ describe('ClientService', () => {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
@@ -338,6 +340,7 @@ describe('ClientService', () => {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
@@ -382,6 +385,7 @@ describe('ClientService', () => {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
@@ -427,6 +431,7 @@ describe('ClientService', () => {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
@@ -479,6 +484,7 @@ describe('ClientService', () => {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
