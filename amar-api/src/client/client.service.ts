@@ -157,6 +157,7 @@ export class ClientService {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
@@ -223,6 +224,7 @@ export class ClientService {
           yogaClasses: true,
           presences: true,
           contracts: true,
+          transactions: true,
           notifications: true,
         },
       });
