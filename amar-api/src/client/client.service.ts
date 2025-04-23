@@ -144,7 +144,16 @@ export class ClientService {
           id: clientId,
         },
         include: {
-          children: true,
+          children: {
+            include: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
           yogaClasses: true,
           presences: true,
           contracts: true,
@@ -177,6 +186,72 @@ export class ClientService {
 
       this.logger.error({
         message: LOGGER_MESSAGES.error.client.fetchClient.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
+        pid: process.pid,
+        timestamp,
+      });
+
+      throw new InternalServerErrorException({
+        message: HTTP_MESSAGES.EN.generalMessages.status_500,
+        pid: process.pid,
+        timestamp,
+      });
+    }
+  }
+
+  async fetchClientByName(clientName: string): Promise<EndpointReturn> {
+    try {
+      const client: Client = await this.prismaService.client.findFirstOrThrow({
+        where: {
+          name: {
+            contains: clientName,
+          },
+        },
+        include: {
+          children: {
+            select: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          yogaClasses: true,
+          presences: true,
+          contracts: true,
+          notifications: true,
+        },
+      });
+
+      return {
+        message: HTTP_MESSAGES.EN.client.fetchClientByName.status_200,
+        data: client,
+      };
+    } catch (error) {
+      if (error.code === 'P2025') {
+        const timestamp: string = generateTimestamp();
+
+        this.logger.log({
+          message: LOGGER_MESSAGES.log.client.fetchClientByName.notFound,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.client.fetchClientByName.status_404,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+
+      const timestamp: string = generateTimestamp();
+
+      this.logger.error({
+        message: LOGGER_MESSAGES.error.client.fetchClientByName.internalError,
         code: error.code,
         error: error.message,
         stack: error.stack,

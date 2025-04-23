@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import CreateClientDTO from './dto/CreateClientDTO';
@@ -41,6 +42,13 @@ export class ClientController {
     @Body() clientInfo: CreateClientDTO,
   ): Promise<{ message: string; data: Client }> {
     return this.clientService.createClient(clientInfo);
+  }
+
+  @Get()
+  async fetchClientByName(
+    @Query('clientName') clientName: string,
+  ): Promise<EndpointReturn> {
+    return this.clientService.fetchClientByName(clientName);
   }
 
   @Get()
