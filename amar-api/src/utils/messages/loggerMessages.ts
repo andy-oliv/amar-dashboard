@@ -7,9 +7,29 @@ const LOGGER_MESSAGES = {
         internalError:
           'An unexpected error ocurred during the registration of the new child in the database. Check the error log to find more information.',
       },
+      deleteChild: {
+        internalError:
+          'An unexpected error ocurred while updating child in the database. Check the error log to find more information.',
+        notFound: 'The child was found or the ID is incorrect.',
+      },
+      fetchChild: {
+        internalError:
+          'An unexpected error ocurred while fetching child in the database. Check the error log to find more information.',
+        notFound: 'The child was not found or the ID is invalid.',
+      },
       fetchChildren: {
         internalError:
           'An unexpected error ocurred while fetching the child registers in the database. Check the error log to find more information.',
+      },
+      fetchChildrenByName: {
+        internalError:
+          'An unexpected error ocurred while fetching child in the database. Check the error log to find more information.',
+        notFound: 'No children were found.',
+      },
+      updateChild: {
+        internalError:
+          'An unexpected error ocurred while updating child in the database. Check the error log to find more information.',
+        notFound: 'The child was found or the ID is incorrect.',
       },
     },
     client: {
@@ -28,7 +48,7 @@ const LOGGER_MESSAGES = {
         internalError:
           'An error occurred while fetching the client. Check the error log to find more information.',
       },
-      fetchClientByName: {
+      fetchClientsByName: {
         internalError:
           'An error occurred while fetching the client. Check the error log to find more information.',
       },
@@ -117,7 +137,7 @@ const LOGGER_MESSAGES = {
       fetchClient: {
         notFound: 'No client was found with the given ID.',
       },
-      fetchClientByName: {
+      fetchClientsByName: {
         notFound: 'No client was found with the given name.',
       },
       helpers: {

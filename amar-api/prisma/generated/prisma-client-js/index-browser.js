@@ -170,7 +170,6 @@ exports.Prisma.YogaClassScalarFieldEnum = {
   status: 'status',
   locationId: 'locationId',
   date: 'date',
-  price: 'price',
   instructorId: 'instructorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -231,11 +230,24 @@ exports.Prisma.ContractScalarFieldEnum = {
   observations: 'observations',
   fileUrl: 'fileUrl',
   videomakerId: 'videomakerId',
-  paymentTypeId: 'paymentTypeId',
   packageId: 'packageId',
   isSigned: 'isSigned',
   isPaid: 'isPaid',
   generalStatus: 'generalStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  date: 'date',
+  description: 'description',
+  method: 'method',
+  isPaid: 'isPaid',
+  contractId: 'contractId',
+  yogaClassId: 'yogaClassId',
+  clientId: 'clientId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -259,13 +271,6 @@ exports.Prisma.NotificationScalarFieldEnum = {
   type: 'type',
   clientId: 'clientId',
   userId: 'userId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.PaymentTypeScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -364,6 +369,13 @@ exports.Prisma.ContractOrderByRelevanceFieldEnum = {
   videomakerId: 'videomakerId'
 };
 
+exports.Prisma.TransactionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  description: 'description',
+  contractId: 'contractId',
+  clientId: 'clientId'
+};
+
 exports.Prisma.ContractPhotographerOrderByRelevanceFieldEnum = {
   photographerId: 'photographerId',
   contractId: 'contractId'
@@ -424,6 +436,11 @@ exports.GeneralStatus = exports.$Enums.GeneralStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  PIX: 'PIX',
+  CREDIT_CARD: 'CREDIT_CARD'
+};
+
 exports.NotificationType = exports.$Enums.NotificationType = {
   CONTRACT_CREATED: 'CONTRACT_CREATED',
   CONTRACT_SIGNED: 'CONTRACT_SIGNED',
@@ -433,11 +450,6 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   EVENT_TIME: 'EVENT_TIME',
   CLASS_TIME: 'CLASS_TIME',
   CUSTOM: 'CUSTOM'
-};
-
-exports.PaymentTypeName = exports.$Enums.PaymentTypeName = {
-  PIX: 'PIX',
-  CREDIT_CARD: 'CREDIT_CARD'
 };
 
 exports.Prisma.ModelName = {
@@ -454,10 +466,10 @@ exports.Prisma.ModelName = {
   RollCall: 'RollCall',
   Presence: 'Presence',
   Contract: 'Contract',
+  Transaction: 'Transaction',
   ContractPhotographer: 'ContractPhotographer',
   ClientContract: 'ClientContract',
   Notification: 'Notification',
-  PaymentType: 'PaymentType',
   Package: 'Package'
 };
 

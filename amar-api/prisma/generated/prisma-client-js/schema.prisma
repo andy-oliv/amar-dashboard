@@ -52,6 +52,7 @@ model Client {
   contracts     ClientContract[]
   yogaClasses   YogaAdultStudent[]
   presences     Presence[]
+  transactions  Transaction[]
   notifications Notification[]
   createdAt     DateTime           @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
   updatedAt     DateTime           @updatedAt @db.Timestamp(0)
@@ -84,7 +85,7 @@ model YogaClass {
   location      Location?          @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   locationId    Int?
   date          DateTime           @db.DateTime()
-  price         Float              @db.Double
+  transactions  Transaction[]
   instructor    User               @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: Cascade)
   instructorId  String
   adultStudents YogaAdultStudent[]
@@ -166,15 +167,31 @@ model Contract {
   photographers      ContractPhotographer[]
   videomaker         User?                  @relation(fields: [videomakerId], references: [id])
   videomakerId       String?
-  paymentType        PaymentType            @relation(fields: [paymentTypeId], references: [id], onUpdate: Cascade, onDelete: NoAction)
-  paymentTypeId      Int
   package            Package                @relation(fields: [packageId], references: [id], onUpdate: Cascade, onDelete: NoAction)
   packageId          Int
+  transactions       Transaction[]
   isSigned           SignatureStatus        @default(PENDING)
   isPaid             PaymentStatus          @default(PENDING)
   generalStatus      GeneralStatus          @default(SCHEDULED)
   createdAt          DateTime               @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
   updatedAt          DateTime               @updatedAt @db.Timestamp(0)
+}
+
+model Transaction {
+  id          String        @id @default(uuid())
+  amount      Float
+  date        DateTime      @default(now())
+  description String?       @db.Text
+  method      PaymentMethod
+  isPaid      Boolean       @default(false)
+  contractId  String?
+  contract    Contract?     @relation(fields: [contractId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  yogaClassId Int?
+  yogaClass   YogaClass?    @relation(fields: [yogaClassId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  clientId    String?
+  client      Client?       @relation(fields: [clientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  createdAt   DateTime      @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
+  updatedAt   DateTime      @updatedAt @db.Timestamp(0)
 }
 
 model ContractPhotographer {
@@ -210,14 +227,6 @@ model Notification {
   updatedAt DateTime         @updatedAt @db.Timestamp(0)
 }
 
-model PaymentType {
-  id        Int             @id @default(autoincrement())
-  name      PaymentTypeName
-  contracts Contract[]
-  createdAt DateTime        @default(dbgenerated("CURRENT_TIMESTAMP")) @db.Timestamp(0)
-  updatedAt DateTime        @updatedAt @db.Timestamp(0)
-}
-
 model Package {
   id        Int        @id @default(autoincrement())
   name      String     @db.VarChar(20)
@@ -250,7 +259,7 @@ enum ContractType {
   EVENT
 }
 
-enum PaymentTypeName {
+enum PaymentMethod {
   PIX
   CREDIT_CARD
 }

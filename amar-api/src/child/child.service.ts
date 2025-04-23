@@ -75,8 +75,14 @@ export class ChildService {
         },
         include: {
           parents: {
-            include: {
-              client: true,
+            select: {
+              client: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
             },
           },
         },
@@ -150,6 +156,237 @@ export class ChildService {
 
       this.logger.error({
         message: LOGGER_MESSAGES.error.child.fetchChildren.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
+        pid: process.pid,
+        timestamp,
+      });
+
+      throw new InternalServerErrorException({
+        message: HTTP_MESSAGES.EN.generalMessages.status_500,
+        pid: process.pid,
+        timestamp,
+      });
+    }
+  }
+
+  async fetchChild(id: string): Promise<EndpointReturn> {
+    try {
+      const children: Child[] = await this.prismaService.child.findMany({
+        where: {
+          id,
+        },
+        include: {
+          parents: {
+            select: {
+              client: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (children.length === 0) {
+        const timestamp: string = generateTimestamp();
+
+        this.logger.error({
+          message: LOGGER_MESSAGES.error.child.fetchChild.notFound,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.child.fetchChild.status_404,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+
+      return {
+        message: HTTP_MESSAGES.EN.child.fetchChild.status_200,
+        data: children,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      const timestamp: string = generateTimestamp();
+
+      this.logger.error({
+        message: LOGGER_MESSAGES.error.child.fetchChild.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
+        pid: process.pid,
+        timestamp,
+      });
+
+      throw new InternalServerErrorException({
+        message: HTTP_MESSAGES.EN.generalMessages.status_500,
+        pid: process.pid,
+        timestamp,
+      });
+    }
+  }
+
+  async fetchChildrenByName(name: string): Promise<EndpointReturn> {
+    try {
+      const children: Child[] = await this.prismaService.child.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+        include: {
+          parents: {
+            select: {
+              client: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (children.length === 0) {
+        const timestamp: string = generateTimestamp();
+
+        this.logger.error({
+          message: LOGGER_MESSAGES.error.child.fetchChildrenByName.notFound,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.child.fetchChildrenByName.status_404,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+
+      return {
+        message: HTTP_MESSAGES.EN.child.fetchChildrenByName.status_200,
+        data: children,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      const timestamp: string = generateTimestamp();
+
+      this.logger.error({
+        message: LOGGER_MESSAGES.error.child.fetchChildrenByName.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
+        pid: process.pid,
+        timestamp,
+      });
+
+      throw new InternalServerErrorException({
+        message: HTTP_MESSAGES.EN.generalMessages.status_500,
+        pid: process.pid,
+        timestamp,
+      });
+    }
+  }
+
+  async updateChild(data: Partial<Child>) {
+    try {
+      const updatedChild: Child = await this.prismaService.child.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          name: data.name,
+        },
+      });
+
+      return {
+        message: HTTP_MESSAGES.EN.child.updateChild.status_200,
+        data: updatedChild,
+      };
+    } catch (error) {
+      if (error.code === 'P2025') {
+        const timestamp: string = generateTimestamp();
+
+        this.logger.error({
+          message: LOGGER_MESSAGES.error.child.updateChild.notFound,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.child.updateChild.status_404,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+
+      const timestamp: string = generateTimestamp();
+
+      this.logger.error({
+        message: LOGGER_MESSAGES.error.child.updateChild.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
+        pid: process.pid,
+        timestamp,
+      });
+
+      throw new InternalServerErrorException({
+        message: HTTP_MESSAGES.EN.generalMessages.status_500,
+        pid: process.pid,
+        timestamp,
+      });
+    }
+  }
+
+  async deleteChild(id: string) {
+    try {
+      const deletedChild: Child = await this.prismaService.child.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      return {
+        message: HTTP_MESSAGES.EN.child.deleteChild.status_200,
+        data: deletedChild,
+      };
+    } catch (error) {
+      if (error.code === 'P2025') {
+        const timestamp: string = generateTimestamp();
+
+        this.logger.error({
+          message: LOGGER_MESSAGES.error.child.deleteChild.notFound,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.child.deleteChild.status_404,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+
+      const timestamp: string = generateTimestamp();
+
+      this.logger.error({
+        message: LOGGER_MESSAGES.error.child.deleteChild.internalError,
         code: error.code,
         error: error.message,
         stack: error.stack,

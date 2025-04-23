@@ -9,9 +9,25 @@ const HTTP_MESSAGES = {
         status_201: 'Child successfully registered.',
         status_409: 'This child has already been registered.',
       },
+      deleteChild: {
+        status_200: 'Child successfully deleted.',
+        status_404: 'The child was not found.',
+      },
+      fetchChild: {
+        status_200: 'Child successfully found',
+        status_404: 'The child was not found.',
+      },
       fetchChildren: {
         status_200: 'Children successfully fetched.',
         status_404: 'There are no registers to show.',
+      },
+      fetchChildrenByName: {
+        status_200: 'Children successfully fetched.',
+        status_404: 'There are no registers to show.',
+      },
+      updateChild: {
+        status_200: 'Child successfully updated.',
+        status_404: 'The child was not found.',
       },
     },
     client: {
@@ -31,9 +47,9 @@ const HTTP_MESSAGES = {
         status_200: 'Client successfully found.',
         status_404: 'Client not found.',
       },
-      fetchClientByName: {
-        status_200: 'Client successfully found.',
-        status_404: 'Client not found.',
+      fetchClientsByName: {
+        status_200: 'Clients successfully found.',
+        status_404: 'No clients found.',
       },
       helpers: {
         status_400: 'One or more parent IDs are invalid.',
