@@ -1,7 +1,19 @@
-import { Matches } from 'class-validator';
+import { isString, Matches } from 'class-validator';
 
 const VALIDATION_MESSAGES = {
   EN: {
+    child: {
+      createChildDTO: {
+        name: {
+          isString: 'The name field needs to be of string type.',
+          isNotEmpty: 'The name field is required.',
+        },
+        parentId: {
+          isArray: 'The parentId field must be an array of strings.',
+          isNotEmpty: 'The parentId field must not be empty.',
+        },
+      },
+    },
     client: {
       createClientDTO: {
         name: {

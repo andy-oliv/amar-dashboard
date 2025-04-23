@@ -68,9 +68,9 @@ model Child {
 }
 
 model Family {
-  client   Client @relation(fields: [clientId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   clientId String
-  child    Child  @relation(fields: [childId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  child    Child  @relation(fields: [childId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   childId  String
 
   @@id([clientId, childId])

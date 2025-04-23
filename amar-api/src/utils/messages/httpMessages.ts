@@ -4,9 +4,19 @@ const HTTP_MESSAGES = {
       status_500:
         'An unexpected error occurred. Please check the error log for more information.',
     },
+    child: {
+      createChild: {
+        status_201: 'Child successfully registered.',
+        status_409: 'This child has already been registered.',
+      },
+      fetchChildren: {
+        status_200: 'Children successfully fetched.',
+        status_404: 'There are no registers to show.',
+      },
+    },
     client: {
       createClient: {
-        status_201: 'Client successfully created.',
+        status_201: 'Client successfully regisred.',
         status_409: 'This client has already been registered.',
       },
       deleteClient: {
@@ -20,6 +30,13 @@ const HTTP_MESSAGES = {
       fetchClient: {
         status_200: 'Client successfully found.',
         status_404: 'Client not found.',
+      },
+      fetchClientByName: {
+        status_200: 'Client successfully found.',
+        status_404: 'Client not found.',
+      },
+      helpers: {
+        status_400: 'One or more parent IDs are invalid.',
       },
       updateClient: {
         status_200: 'Client successfully updated.',

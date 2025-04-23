@@ -1,11 +1,23 @@
 const LOGGER_MESSAGES = {
   error: {
+    child: {
+      createChild: {
+        conflict:
+          'The new child cannot be registered because the same name and parentId has been found in the database.',
+        internalError:
+          'An unexpected error ocurred during the registration of the new child in the database. Check the error log to find more information.',
+      },
+      fetchChildren: {
+        internalError:
+          'An unexpected error ocurred while fetching the child registers in the database. Check the error log to find more information.',
+      },
+    },
     client: {
       createClient: {
         conflict:
           'The new client cannot be registered because the same email was found in the database.',
         internalError:
-          'An unexpected error ocurred during the creation of the new client in the database. Check the error log to find more information.',
+          'An unexpected error ocurred during the registration of the new client in the database. Check the error log to find more information.',
       },
       deleteClient: {
         notFound: 'The ID is invalid or the client was not found.',
@@ -13,6 +25,10 @@ const LOGGER_MESSAGES = {
           'An error occurred while deleting the client. Check the error log to find more information.',
       },
       fetchClient: {
+        internalError:
+          'An error occurred while fetching the client. Check the error log to find more information.',
+      },
+      fetchClientByName: {
         internalError:
           'An error occurred while fetching the client. Check the error log to find more information.',
       },
@@ -80,9 +96,17 @@ const LOGGER_MESSAGES = {
     },
   },
   log: {
+    child: {
+      createChild: {
+        success: 'Child successfully registered.',
+      },
+      fetchChildren: {
+        notFound: 'There are no children to show.',
+      },
+    },
     client: {
       createClient: {
-        success: 'Client successfully created.',
+        success: 'Client successfully registered.',
       },
       deleteClient: {
         success: 'Client successfully deleted.',
@@ -92,6 +116,13 @@ const LOGGER_MESSAGES = {
       },
       fetchClient: {
         notFound: 'No client was found with the given ID.',
+      },
+      fetchClientByName: {
+        notFound: 'No client was found with the given name.',
+      },
+      helpers: {
+        badRequest:
+          'One or more parent IDs are invalid or the parents are not registered yet. Check the log to see more information.',
       },
     },
     role: {

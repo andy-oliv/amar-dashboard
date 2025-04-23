@@ -12,6 +12,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ClientModule } from './client/client.module';
 import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
+import { ChildModule } from './child/child.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { RoleModule } from './role/role.module';
     ClientModule,
     UserModule,
     RoleModule,
+    ChildModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }, AppService],
