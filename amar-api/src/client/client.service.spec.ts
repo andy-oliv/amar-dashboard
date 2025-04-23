@@ -30,6 +30,7 @@ describe('ClientService', () => {
             client: {
               create: jest.fn(),
               findMany: jest.fn(),
+              findFirstOrThrow: jest.fn(),
               findUniqueOrThrow: jest.fn(),
               update: jest.fn(),
               delete: jest.fn(),
@@ -229,7 +230,16 @@ describe('ClientService', () => {
           id: client.id,
         },
         include: {
-          children: true,
+          children: {
+            include: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
           yogaClasses: true,
           presences: true,
           contracts: true,
@@ -265,7 +275,16 @@ describe('ClientService', () => {
           id: client.id,
         },
         include: {
-          children: true,
+          children: {
+            include: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
           yogaClasses: true,
           presences: true,
           contracts: true,
@@ -306,7 +325,160 @@ describe('ClientService', () => {
           id: client.id,
         },
         include: {
-          children: true,
+          children: {
+            include: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          yogaClasses: true,
+          presences: true,
+          contracts: true,
+          notifications: true,
+        },
+      });
+
+      expect(logger.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('fetchClientByName()', () => {
+    it('should fetch a client', async () => {
+      const client: Client = generateMockClient();
+
+      (prismaService.client.findFirstOrThrow as jest.Mock).mockResolvedValue(
+        client,
+      );
+
+      const result: EndpointReturn = await clientService.fetchClientByName(
+        client.name,
+      );
+
+      expect(result).toMatchObject({
+        message: HTTP_MESSAGES.EN.client.fetchClientByName.status_200,
+        data: client,
+      });
+
+      expect(prismaService.client.findFirstOrThrow).toHaveBeenCalledWith({
+        where: {
+          name: {
+            contains: client.name,
+          },
+        },
+        include: {
+          children: {
+            select: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          yogaClasses: true,
+          presences: true,
+          contracts: true,
+          notifications: true,
+        },
+      });
+    });
+
+    it('should throw a not found exception', async () => {
+      const client: Client = generateMockClient();
+      const timestamp: string = generateTimestamp();
+      const error: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('Record not found', {
+          code: 'P2025',
+          clientVersion: 'fake-client-version',
+        });
+
+      (prismaService.client.findFirstOrThrow as jest.Mock).mockRejectedValue(
+        error,
+      );
+      (logger.log as jest.Mock).mockReturnValue({
+        message: LOGGER_MESSAGES.log.client.fetchClientByName.notFound,
+        pid: process.pid,
+        timestamp,
+      });
+
+      await expect(
+        clientService.fetchClientByName(client.name),
+      ).rejects.toThrow(HTTP_MESSAGES.EN.client.fetchClientByName.status_404);
+
+      expect(prismaService.client.findFirstOrThrow).toHaveBeenCalledWith({
+        where: {
+          name: {
+            contains: client.name,
+          },
+        },
+        include: {
+          children: {
+            select: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          yogaClasses: true,
+          presences: true,
+          contracts: true,
+          notifications: true,
+        },
+      });
+
+      expect(logger.log).toHaveBeenCalled();
+    });
+
+    it('should throw an internal server error', async () => {
+      const client: Client = generateMockClient();
+      const error: any = {
+        code: '',
+        message: '',
+        stack: '',
+      };
+      const timestamp: string = 'mock-timestamp';
+
+      (prismaService.client.findFirstOrThrow as jest.Mock).mockRejectedValue(
+        'prismaValidationError',
+      );
+      (logger.error as jest.Mock).mockReturnValue({
+        message: LOGGER_MESSAGES.error.client.fetchClientByName.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
+        pid: process.pid,
+        timestamp,
+      });
+
+      await expect(
+        clientService.fetchClientByName(client.name),
+      ).rejects.toThrow(HTTP_MESSAGES.EN.generalMessages.status_500);
+
+      expect(prismaService.client.findFirstOrThrow).toHaveBeenCalledWith({
+        where: {
+          name: {
+            contains: client.name,
+          },
+        },
+        include: {
+          children: {
+            select: {
+              child: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
           yogaClasses: true,
           presences: true,
           contracts: true,
