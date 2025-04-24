@@ -7,6 +7,7 @@ import EndpointReturn from '../interfaces/EndpointReturn';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
 import Location from '../interfaces/Location';
 import { faker } from '@faker-js/faker/.';
+import { BadRequestException } from '@nestjs/common';
 
 describe('LocationController', () => {
   let locationController: LocationController;
@@ -106,6 +107,15 @@ describe('LocationController', () => {
 
       expect(locationService.fetchLocationsByNameOrAddress).toHaveBeenCalled();
       expect(result).toMatchObject(mockReturn);
+    });
+
+    it('should throw a bad request exception', async () => {
+      const name: string = '';
+      const address: string = '';
+
+      await expect(
+        locationController.fetchLocationsByNameOrAddress({ name, address }),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
