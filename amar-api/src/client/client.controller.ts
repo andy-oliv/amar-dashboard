@@ -45,6 +45,21 @@ export class ClientController {
   }
 
   @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    example: HTTP_MESSAGES.EN.client.fetchClientsByName.status_200,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    example: HTTP_MESSAGES.EN.client.fetchClientsByName.status_404,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal error',
+    example: HTTP_MESSAGES.EN.generalMessages.status_500,
+  })
   async fetchClientsByName(
     @Query('name') name: string,
   ): Promise<EndpointReturn> {
