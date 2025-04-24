@@ -15,7 +15,7 @@ import CreateUserDTO from './dto/createUserDTO';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
 import UpdateUserDTO from './dto/updateUserDTO';
 
-@ApiTags('User')
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}

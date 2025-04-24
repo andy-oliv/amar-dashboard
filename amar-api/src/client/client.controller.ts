@@ -17,7 +17,7 @@ import HTTP_MESSAGES from '../utils/messages/httpMessages';
 import EndpointReturn from '../interfaces/EndpointReturn';
 import updateClientDTO from './dto/updateClientDTO';
 
-@ApiTags('Client')
+@ApiTags('Clients')
 @Controller('clients')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
