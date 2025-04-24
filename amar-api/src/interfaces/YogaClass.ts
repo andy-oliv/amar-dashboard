@@ -5,7 +5,7 @@ import {
 
 export default interface YogaClass {
   id?: number;
-  name: number;
+  name: string;
   type: YogaClassType;
   status: YogaClassStatus;
   locationId?: number;

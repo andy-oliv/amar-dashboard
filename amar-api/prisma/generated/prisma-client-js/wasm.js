@@ -165,7 +165,6 @@ exports.Prisma.FamilyScalarFieldEnum = {
 
 exports.Prisma.YogaClassScalarFieldEnum = {
   id: 'id',
-  name: 'name',
   type: 'type',
   status: 'status',
   locationId: 'locationId',
@@ -333,7 +332,6 @@ exports.Prisma.FamilyOrderByRelevanceFieldEnum = {
 };
 
 exports.Prisma.YogaClassOrderByRelevanceFieldEnum = {
-  name: 'name',
   instructorId: 'instructorId'
 };
 

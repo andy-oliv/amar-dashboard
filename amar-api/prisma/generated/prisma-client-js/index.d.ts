@@ -8804,7 +8804,6 @@ export namespace Prisma {
 
   export type YogaClassMinAggregateOutputType = {
     id: number | null
-    name: string | null
     type: $Enums.YogaClassType | null
     status: $Enums.YogaClassStatus | null
     locationId: number | null
@@ -8816,7 +8815,6 @@ export namespace Prisma {
 
   export type YogaClassMaxAggregateOutputType = {
     id: number | null
-    name: string | null
     type: $Enums.YogaClassType | null
     status: $Enums.YogaClassStatus | null
     locationId: number | null
@@ -8828,7 +8826,6 @@ export namespace Prisma {
 
   export type YogaClassCountAggregateOutputType = {
     id: number
-    name: number
     type: number
     status: number
     locationId: number
@@ -8852,7 +8849,6 @@ export namespace Prisma {
 
   export type YogaClassMinAggregateInputType = {
     id?: true
-    name?: true
     type?: true
     status?: true
     locationId?: true
@@ -8864,7 +8860,6 @@ export namespace Prisma {
 
   export type YogaClassMaxAggregateInputType = {
     id?: true
-    name?: true
     type?: true
     status?: true
     locationId?: true
@@ -8876,7 +8871,6 @@ export namespace Prisma {
 
   export type YogaClassCountAggregateInputType = {
     id?: true
-    name?: true
     type?: true
     status?: true
     locationId?: true
@@ -8975,10 +8969,9 @@ export namespace Prisma {
 
   export type YogaClassGroupByOutputType = {
     id: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId: number | null
+    locationId: number
     date: Date
     instructorId: string
     createdAt: Date
@@ -9006,7 +8999,6 @@ export namespace Prisma {
 
   export type YogaClassSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
     type?: boolean
     status?: boolean
     locationId?: boolean
@@ -9014,7 +9006,7 @@ export namespace Prisma {
     instructorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    location?: boolean | YogaClass$locationArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
     transactions?: boolean | YogaClass$transactionsArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     adultStudents?: boolean | YogaClass$adultStudentsArgs<ExtArgs>
@@ -9027,7 +9019,6 @@ export namespace Prisma {
 
   export type YogaClassSelectScalar = {
     id?: boolean
-    name?: boolean
     type?: boolean
     status?: boolean
     locationId?: boolean
@@ -9037,9 +9028,9 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type YogaClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "type" | "status" | "locationId" | "date" | "instructorId" | "createdAt" | "updatedAt", ExtArgs["result"]["yogaClass"]>
+  export type YogaClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "status" | "locationId" | "date" | "instructorId" | "createdAt" | "updatedAt", ExtArgs["result"]["yogaClass"]>
   export type YogaClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    location?: boolean | YogaClass$locationArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
     transactions?: boolean | YogaClass$transactionsArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     adultStudents?: boolean | YogaClass$adultStudentsArgs<ExtArgs>
@@ -9051,7 +9042,7 @@ export namespace Prisma {
   export type $YogaClassPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "YogaClass"
     objects: {
-      location: Prisma.$LocationPayload<ExtArgs> | null
+      location: Prisma.$LocationPayload<ExtArgs>
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
       instructor: Prisma.$UserPayload<ExtArgs>
       adultStudents: Prisma.$YogaAdultStudentPayload<ExtArgs>[]
@@ -9060,10 +9051,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      name: string
       type: $Enums.YogaClassType
       status: $Enums.YogaClassStatus
-      locationId: number | null
+      locationId: number
       date: Date
       instructorId: string
       createdAt: Date
@@ -9408,7 +9398,7 @@ export namespace Prisma {
    */
   export interface Prisma__YogaClassClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    location<T extends YogaClass$locationArgs<ExtArgs> = {}>(args?: Subset<T, YogaClass$locationArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    location<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     transactions<T extends YogaClass$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, YogaClass$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     instructor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     adultStudents<T extends YogaClass$adultStudentsArgs<ExtArgs> = {}>(args?: Subset<T, YogaClass$adultStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$YogaAdultStudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -9444,7 +9434,6 @@ export namespace Prisma {
    */
   interface YogaClassFieldRefs {
     readonly id: FieldRef<"YogaClass", 'Int'>
-    readonly name: FieldRef<"YogaClass", 'String'>
     readonly type: FieldRef<"YogaClass", 'YogaClassType'>
     readonly status: FieldRef<"YogaClass", 'YogaClassStatus'>
     readonly locationId: FieldRef<"YogaClass", 'Int'>
@@ -9792,25 +9781,6 @@ export namespace Prisma {
      * Limit how many YogaClasses to delete.
      */
     limit?: number
-  }
-
-  /**
-   * YogaClass.location
-   */
-  export type YogaClass$locationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    where?: LocationWhereInput
   }
 
   /**
@@ -21113,7 +21083,6 @@ export namespace Prisma {
 
   export const YogaClassScalarFieldEnum: {
     id: 'id',
-    name: 'name',
     type: 'type',
     status: 'status',
     locationId: 'locationId',
@@ -21341,7 +21310,6 @@ export namespace Prisma {
 
 
   export const YogaClassOrderByRelevanceFieldEnum: {
-    name: 'name',
     instructorId: 'instructorId'
   };
 
@@ -21917,15 +21885,14 @@ export namespace Prisma {
     OR?: YogaClassWhereInput[]
     NOT?: YogaClassWhereInput | YogaClassWhereInput[]
     id?: IntFilter<"YogaClass"> | number
-    name?: StringFilter<"YogaClass"> | string
     type?: EnumYogaClassTypeFilter<"YogaClass"> | $Enums.YogaClassType
     status?: EnumYogaClassStatusFilter<"YogaClass"> | $Enums.YogaClassStatus
-    locationId?: IntNullableFilter<"YogaClass"> | number | null
+    locationId?: IntFilter<"YogaClass"> | number
     date?: DateTimeFilter<"YogaClass"> | Date | string
     instructorId?: StringFilter<"YogaClass"> | string
     createdAt?: DateTimeFilter<"YogaClass"> | Date | string
     updatedAt?: DateTimeFilter<"YogaClass"> | Date | string
-    location?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     transactions?: TransactionListRelationFilter
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
     adultStudents?: YogaAdultStudentListRelationFilter
@@ -21935,10 +21902,9 @@ export namespace Prisma {
 
   export type YogaClassOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    locationId?: SortOrderInput | SortOrder
+    locationId?: SortOrder
     date?: SortOrder
     instructorId?: SortOrder
     createdAt?: SortOrder
@@ -21957,15 +21923,14 @@ export namespace Prisma {
     AND?: YogaClassWhereInput | YogaClassWhereInput[]
     OR?: YogaClassWhereInput[]
     NOT?: YogaClassWhereInput | YogaClassWhereInput[]
-    name?: StringFilter<"YogaClass"> | string
     type?: EnumYogaClassTypeFilter<"YogaClass"> | $Enums.YogaClassType
     status?: EnumYogaClassStatusFilter<"YogaClass"> | $Enums.YogaClassStatus
-    locationId?: IntNullableFilter<"YogaClass"> | number | null
+    locationId?: IntFilter<"YogaClass"> | number
     date?: DateTimeFilter<"YogaClass"> | Date | string
     instructorId?: StringFilter<"YogaClass"> | string
     createdAt?: DateTimeFilter<"YogaClass"> | Date | string
     updatedAt?: DateTimeFilter<"YogaClass"> | Date | string
-    location?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     transactions?: TransactionListRelationFilter
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
     adultStudents?: YogaAdultStudentListRelationFilter
@@ -21975,10 +21940,9 @@ export namespace Prisma {
 
   export type YogaClassOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    locationId?: SortOrderInput | SortOrder
+    locationId?: SortOrder
     date?: SortOrder
     instructorId?: SortOrder
     createdAt?: SortOrder
@@ -21995,10 +21959,9 @@ export namespace Prisma {
     OR?: YogaClassScalarWhereWithAggregatesInput[]
     NOT?: YogaClassScalarWhereWithAggregatesInput | YogaClassScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"YogaClass"> | number
-    name?: StringWithAggregatesFilter<"YogaClass"> | string
     type?: EnumYogaClassTypeWithAggregatesFilter<"YogaClass"> | $Enums.YogaClassType
     status?: EnumYogaClassStatusWithAggregatesFilter<"YogaClass"> | $Enums.YogaClassStatus
-    locationId?: IntNullableWithAggregatesFilter<"YogaClass"> | number | null
+    locationId?: IntWithAggregatesFilter<"YogaClass"> | number
     date?: DateTimeWithAggregatesFilter<"YogaClass"> | Date | string
     instructorId?: StringWithAggregatesFilter<"YogaClass"> | string
     createdAt?: DateTimeWithAggregatesFilter<"YogaClass"> | Date | string
@@ -23168,13 +23131,12 @@ export namespace Prisma {
   }
 
   export type YogaClassCreateInput = {
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    location?: LocationCreateNestedOneWithoutClassesInput
+    location: LocationCreateNestedOneWithoutClassesInput
     transactions?: TransactionCreateNestedManyWithoutYogaClassInput
     instructor: UserCreateNestedOneWithoutClassesInput
     adultStudents?: YogaAdultStudentCreateNestedManyWithoutYogaClassInput
@@ -23184,10 +23146,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedCreateInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     instructorId: string
     createdAt?: Date | string
@@ -23199,13 +23160,12 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneWithoutClassesNestedInput
+    location?: LocationUpdateOneRequiredWithoutClassesNestedInput
     transactions?: TransactionUpdateManyWithoutYogaClassNestedInput
     instructor?: UserUpdateOneRequiredWithoutClassesNestedInput
     adultStudents?: YogaAdultStudentUpdateManyWithoutYogaClassNestedInput
@@ -23215,10 +23175,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23231,10 +23190,9 @@ export namespace Prisma {
 
   export type YogaClassCreateManyInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     instructorId: string
     createdAt?: Date | string
@@ -23242,7 +23200,6 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23252,10 +23209,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24456,20 +24412,9 @@ export namespace Prisma {
     not?: NestedEnumYogaClassStatusFilter<$PrismaModel> | $Enums.YogaClassStatus
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type LocationNullableScalarRelationFilter = {
-    is?: LocationWhereInput | null
-    isNot?: LocationWhereInput | null
+  export type LocationScalarRelationFilter = {
+    is?: LocationWhereInput
+    isNot?: LocationWhereInput
   }
 
   export type RollCallNullableScalarRelationFilter = {
@@ -24485,7 +24430,6 @@ export namespace Prisma {
 
   export type YogaClassCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     type?: SortOrder
     status?: SortOrder
     locationId?: SortOrder
@@ -24502,7 +24446,6 @@ export namespace Prisma {
 
   export type YogaClassMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     type?: SortOrder
     status?: SortOrder
     locationId?: SortOrder
@@ -24514,7 +24457,6 @@ export namespace Prisma {
 
   export type YogaClassMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     type?: SortOrder
     status?: SortOrder
     locationId?: SortOrder
@@ -24563,22 +24505,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumYogaClassStatusFilter<$PrismaModel>
     _max?: NestedEnumYogaClassStatusFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type LocationOrderByRelevanceInput = {
@@ -25028,6 +24954,17 @@ export namespace Prisma {
     not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ContractNullableScalarRelationFilter = {
     is?: ContractWhereInput | null
     isNot?: ContractWhereInput | null
@@ -25104,6 +25041,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ContractScalarRelationFilter = {
@@ -26042,12 +25995,10 @@ export namespace Prisma {
     set?: $Enums.YogaClassStatus
   }
 
-  export type LocationUpdateOneWithoutClassesNestedInput = {
+  export type LocationUpdateOneRequiredWithoutClassesNestedInput = {
     create?: XOR<LocationCreateWithoutClassesInput, LocationUncheckedCreateWithoutClassesInput>
     connectOrCreate?: LocationCreateOrConnectWithoutClassesInput
     upsert?: LocationUpsertWithoutClassesInput
-    disconnect?: LocationWhereInput | boolean
-    delete?: LocationWhereInput | boolean
     connect?: LocationWhereUniqueInput
     update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutClassesInput, LocationUpdateWithoutClassesInput>, LocationUncheckedUpdateWithoutClassesInput>
   }
@@ -26114,14 +26065,6 @@ export namespace Prisma {
 
   export type IntFieldUpdateOperationsInput = {
     set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -26620,6 +26563,14 @@ export namespace Prisma {
     update?: XOR<XOR<ClientUpdateToOneWithWhereWithoutTransactionsInput, ClientUpdateWithoutTransactionsInput>, ClientUncheckedUpdateWithoutTransactionsInput>
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserCreateNestedOneWithoutPhotoContractsInput = {
     create?: XOR<UserCreateWithoutPhotoContractsInput, UserUncheckedCreateWithoutPhotoContractsInput>
     connectOrCreate?: UserCreateOrConnectWithoutPhotoContractsInput
@@ -26928,33 +26879,6 @@ export namespace Prisma {
     _max?: NestedEnumYogaClassStatusFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedEnumStudentTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StudentType[]
@@ -27086,6 +27010,33 @@ export namespace Prisma {
     _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NotificationType[]
@@ -27154,13 +27105,12 @@ export namespace Prisma {
   }
 
   export type YogaClassCreateWithoutInstructorInput = {
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    location?: LocationCreateNestedOneWithoutClassesInput
+    location: LocationCreateNestedOneWithoutClassesInput
     transactions?: TransactionCreateNestedManyWithoutYogaClassInput
     adultStudents?: YogaAdultStudentCreateNestedManyWithoutYogaClassInput
     childStudents?: YogaChildStudentCreateNestedManyWithoutYogaClassInput
@@ -27169,10 +27119,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedCreateWithoutInstructorInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -27346,10 +27295,9 @@ export namespace Prisma {
     OR?: YogaClassScalarWhereInput[]
     NOT?: YogaClassScalarWhereInput | YogaClassScalarWhereInput[]
     id?: IntFilter<"YogaClass"> | number
-    name?: StringFilter<"YogaClass"> | string
     type?: EnumYogaClassTypeFilter<"YogaClass"> | $Enums.YogaClassType
     status?: EnumYogaClassStatusFilter<"YogaClass"> | $Enums.YogaClassStatus
-    locationId?: IntNullableFilter<"YogaClass"> | number | null
+    locationId?: IntFilter<"YogaClass"> | number
     date?: DateTimeFilter<"YogaClass"> | Date | string
     instructorId?: StringFilter<"YogaClass"> | string
     createdAt?: DateTimeFilter<"YogaClass"> | Date | string
@@ -28432,7 +28380,6 @@ export namespace Prisma {
   }
 
   export type YogaClassCreateWithoutLocationInput = {
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
@@ -28447,7 +28394,6 @@ export namespace Prisma {
 
   export type YogaClassUncheckedCreateWithoutLocationInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
@@ -28487,13 +28433,12 @@ export namespace Prisma {
   }
 
   export type YogaClassCreateWithoutChildStudentsInput = {
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    location?: LocationCreateNestedOneWithoutClassesInput
+    location: LocationCreateNestedOneWithoutClassesInput
     transactions?: TransactionCreateNestedManyWithoutYogaClassInput
     instructor: UserCreateNestedOneWithoutClassesInput
     adultStudents?: YogaAdultStudentCreateNestedManyWithoutYogaClassInput
@@ -28502,10 +28447,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedCreateWithoutChildStudentsInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     instructorId: string
     createdAt?: Date | string
@@ -28555,13 +28499,12 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateWithoutChildStudentsInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneWithoutClassesNestedInput
+    location?: LocationUpdateOneRequiredWithoutClassesNestedInput
     transactions?: TransactionUpdateManyWithoutYogaClassNestedInput
     instructor?: UserUpdateOneRequiredWithoutClassesNestedInput
     adultStudents?: YogaAdultStudentUpdateManyWithoutYogaClassNestedInput
@@ -28570,10 +28513,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateWithoutChildStudentsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28613,13 +28555,12 @@ export namespace Prisma {
   }
 
   export type YogaClassCreateWithoutAdultStudentsInput = {
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    location?: LocationCreateNestedOneWithoutClassesInput
+    location: LocationCreateNestedOneWithoutClassesInput
     transactions?: TransactionCreateNestedManyWithoutYogaClassInput
     instructor: UserCreateNestedOneWithoutClassesInput
     childStudents?: YogaChildStudentCreateNestedManyWithoutYogaClassInput
@@ -28628,10 +28569,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedCreateWithoutAdultStudentsInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     instructorId: string
     createdAt?: Date | string
@@ -28697,13 +28637,12 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateWithoutAdultStudentsInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneWithoutClassesNestedInput
+    location?: LocationUpdateOneRequiredWithoutClassesNestedInput
     transactions?: TransactionUpdateManyWithoutYogaClassNestedInput
     instructor?: UserUpdateOneRequiredWithoutClassesNestedInput
     childStudents?: YogaChildStudentUpdateManyWithoutYogaClassNestedInput
@@ -28712,10 +28651,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateWithoutAdultStudentsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28771,13 +28709,12 @@ export namespace Prisma {
   }
 
   export type YogaClassCreateWithoutRollCallInput = {
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    location?: LocationCreateNestedOneWithoutClassesInput
+    location: LocationCreateNestedOneWithoutClassesInput
     transactions?: TransactionCreateNestedManyWithoutYogaClassInput
     instructor: UserCreateNestedOneWithoutClassesInput
     adultStudents?: YogaAdultStudentCreateNestedManyWithoutYogaClassInput
@@ -28786,10 +28723,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedCreateWithoutRollCallInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     instructorId: string
     createdAt?: Date | string
@@ -28847,13 +28783,12 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateWithoutRollCallInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneWithoutClassesNestedInput
+    location?: LocationUpdateOneRequiredWithoutClassesNestedInput
     transactions?: TransactionUpdateManyWithoutYogaClassNestedInput
     instructor?: UserUpdateOneRequiredWithoutClassesNestedInput
     adultStudents?: YogaAdultStudentUpdateManyWithoutYogaClassNestedInput
@@ -28862,10 +28797,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateWithoutRollCallInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -29373,13 +29307,12 @@ export namespace Prisma {
   }
 
   export type YogaClassCreateWithoutTransactionsInput = {
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    location?: LocationCreateNestedOneWithoutClassesInput
+    location: LocationCreateNestedOneWithoutClassesInput
     instructor: UserCreateNestedOneWithoutClassesInput
     adultStudents?: YogaAdultStudentCreateNestedManyWithoutYogaClassInput
     childStudents?: YogaChildStudentCreateNestedManyWithoutYogaClassInput
@@ -29388,10 +29321,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedCreateWithoutTransactionsInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     instructorId: string
     createdAt?: Date | string
@@ -29518,13 +29450,12 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateWithoutTransactionsInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneWithoutClassesNestedInput
+    location?: LocationUpdateOneRequiredWithoutClassesNestedInput
     instructor?: UserUpdateOneRequiredWithoutClassesNestedInput
     adultStudents?: YogaAdultStudentUpdateManyWithoutYogaClassNestedInput
     childStudents?: YogaChildStudentUpdateManyWithoutYogaClassNestedInput
@@ -29533,10 +29464,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateWithoutTransactionsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30228,10 +30158,9 @@ export namespace Prisma {
 
   export type YogaClassCreateManyInstructorInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
-    locationId?: number | null
+    locationId: number
     date: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30309,13 +30238,12 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateWithoutInstructorInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneWithoutClassesNestedInput
+    location?: LocationUpdateOneRequiredWithoutClassesNestedInput
     transactions?: TransactionUpdateManyWithoutYogaClassNestedInput
     adultStudents?: YogaAdultStudentUpdateManyWithoutYogaClassNestedInput
     childStudents?: YogaChildStudentUpdateManyWithoutYogaClassNestedInput
@@ -30324,10 +30252,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateWithoutInstructorInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30339,10 +30266,9 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateManyWithoutInstructorInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
-    locationId?: NullableIntFieldUpdateOperationsInput | number | null
+    locationId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30800,7 +30726,6 @@ export namespace Prisma {
 
   export type YogaClassCreateManyLocationInput = {
     id?: number
-    name: string
     type: $Enums.YogaClassType
     status: $Enums.YogaClassStatus
     date: Date | string
@@ -30810,7 +30735,6 @@ export namespace Prisma {
   }
 
   export type YogaClassUpdateWithoutLocationInput = {
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30825,7 +30749,6 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateWithoutLocationInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30840,7 +30763,6 @@ export namespace Prisma {
 
   export type YogaClassUncheckedUpdateManyWithoutLocationInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
     type?: EnumYogaClassTypeFieldUpdateOperationsInput | $Enums.YogaClassType
     status?: EnumYogaClassStatusFieldUpdateOperationsInput | $Enums.YogaClassStatus
     date?: DateTimeFieldUpdateOperationsInput | Date | string

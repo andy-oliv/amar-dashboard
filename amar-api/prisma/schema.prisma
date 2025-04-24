@@ -79,11 +79,10 @@ model Family {
 
 model YogaClass {
   id Int @id @default(autoincrement())
-  name String @db.VarChar(50)
   type YogaClassType
   status YogaClassStatus
-  location Location? @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  locationId Int?
+  location Location @relation(fields: [locationId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  locationId Int
   date DateTime @db.DateTime()
   transactions Transaction[]
   instructor User @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: Cascade)
