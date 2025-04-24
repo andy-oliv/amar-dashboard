@@ -59,6 +59,33 @@ const HTTP_MESSAGES = {
         status_404: 'client not found.',
       },
     },
+    location: {
+      createLocation: {
+        status_201: 'Location successfully created.',
+        status_409: 'This location has already been registered.',
+      },
+      fetchLocation: {
+        status_200: 'Location successfully found.',
+        status_404: 'The location was not found.',
+      },
+      fetchLocations: {
+        status_200: 'Locations successfully found.',
+        status_404: 'There are no locations to show.',
+      },
+      fetchLocationsByNameOrAddress: {
+        status_200: 'Locations successfully found.',
+        status_400: 'At least a name or address must be provided.',
+        status_404: 'There are no locations to show.',
+      },
+      updateLocation: {
+        status_200: 'Location successfully updated.',
+        status_404: 'The location was not found.',
+      },
+      deleteLocation: {
+        status_200: 'Location successfully deleted.',
+        status_404: 'The location was not found.',
+      },
+    },
     role: {
       createRole: {
         status_201: 'The role has successfully been created.',

@@ -62,6 +62,36 @@ const LOGGER_MESSAGES = {
           'An error occurred while updating the client. Check the error log to find more information.',
       },
     },
+    location: {
+      createLocation: {
+        conflict: 'This location has already been registered.',
+        internalError:
+          'An error occurred while creating the location. Check the error log to find more information.',
+      },
+      fetchLocation: {
+        notFound: 'The location was not found or the ID is invalid.',
+        internalError:
+          'An error occurred while creating the location. Check the error log to find more information.',
+      },
+      fetchLocations: {
+        internalError:
+          'An error occurred while fetching the locations. Check the error log to find more information.',
+      },
+      fetchLocationsByNameOrAddress: {
+        internalError:
+          'An error occurred while fetching the locations. Check the error log to find more information.',
+      },
+      updateLocation: {
+        notFound: 'The location was not found or the ID is invalid.',
+        internalError:
+          'An error occurred while updating the location. Check the error log to find more information.',
+      },
+      deleteLocation: {
+        notFound: 'The location was not found or the ID is invalid.',
+        internalError:
+          'An error occurred while deleting the location. Check the error log to find more information.',
+      },
+    },
     role: {
       createRole: {
         conflict:
@@ -143,6 +173,17 @@ const LOGGER_MESSAGES = {
       helpers: {
         badRequest:
           'One or more parent IDs are invalid or the parents are not registered yet. Check the log to see more information.',
+      },
+    },
+    location: {
+      createLocation: {
+        success: 'Location successfully created.',
+      },
+      fetchLocations: {
+        notFound: 'There are no locations to show.',
+      },
+      fetchLocationsByNameOrAddress: {
+        notFound: 'No locations were found.',
       },
     },
     role: {

@@ -14,6 +14,7 @@ import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
 import { ChildModule } from './child/child.module';
 import { YogaclassModule } from './yogaclass/yogaclass.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { YogaclassModule } from './yogaclass/yogaclass.module';
     RoleModule,
     ChildModule,
     YogaclassModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }, AppService],

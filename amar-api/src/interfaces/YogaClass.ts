@@ -5,10 +5,9 @@ import {
 
 export default interface YogaClass {
   id?: number;
-  name: string;
   type: YogaClassType;
   status: YogaClassStatus;
-  locationId?: number;
+  locationId: number;
   date: Date;
   instructorId: string;
 }

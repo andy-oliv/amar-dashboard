@@ -42,6 +42,48 @@ const VALIDATION_MESSAGES = {
         },
       },
     },
+    location: {
+      createLocationDTO: {
+        name: {
+          isString: 'The name field needs to be of string type.',
+          isNotEmpty: 'The name field is required.',
+        },
+        address: {
+          isString: 'The address field needs to be of string type.',
+          isNotEmpty: 'The address field is required.',
+        },
+        neighborhood: {
+          isString: 'The neighborhood field needs to be of string type.',
+          isNotEmpty: 'The neighborhood field is required.',
+        },
+        city: {
+          isString: 'The city field needs to be of string type.',
+          isNotEmpty: 'The city field is required.',
+        },
+      },
+      fetchLocationDTO: {
+        name: {
+          isString: 'The name field needs to be of string type.',
+        },
+        address: {
+          isString: 'The address field needs to be of string type.',
+        },
+      },
+      updateLocationDTO: {
+        name: {
+          isString: 'The name field needs to be of string type.',
+        },
+        address: {
+          isString: 'The address field needs to be of string type.',
+        },
+        neighborhood: {
+          isString: 'The neighborhood field needs to be of string type.',
+        },
+        city: {
+          isString: 'The city field needs to be of string type.',
+        },
+      },
+    },
     role: {
       createRoleDTO: {
         title: {
