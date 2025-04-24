@@ -25,9 +25,9 @@ export default class createClassDTO {
   @IsIn(['SCHEDULED', 'CANCELLED', 'DONE', 'RESCHEDULED'], { message: '' })
   status: YogaClassStatus;
 
-  @IsOptional()
+  @IsNotEmpty({ message: '' })
   @IsNumber({ allowNaN: false }, { message: '' })
-  locationId?: number;
+  locationId: number;
 
   @IsNotEmpty({ message: '' })
   @IsDateString({}, { message: '' })
