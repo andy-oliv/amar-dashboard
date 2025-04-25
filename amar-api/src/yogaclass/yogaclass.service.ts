@@ -21,13 +21,10 @@ import FetchByRangeDTO from './dto/fetchByRangeDTO';
 import { parseIsoString } from '../helpers/time.helper';
 import CreateClassDTO from './dto/createClassDTO';
 import UpdateClassDTO from './dto/updateClassDTO';
-import Client from '../interfaces/Client';
-import Child from '../interfaces/Child';
 import {
-  YogaAdultStudent,
-  YogaChildStudent,
-} from '../../prisma/generated/prisma-client-js';
-import { checkClassExists } from '../helpers/yogaClass.helper';
+  checkClassExists,
+  checkStudentExists,
+} from '../helpers/yogaClass.helper';
 
 @Injectable()
 export class YogaclassService {
@@ -563,68 +560,18 @@ export class YogaclassService {
       classId,
     );
 
-    if (!foundClass) {
-      const timestamp: string = generateTimestamp();
-
-      this.logger.error({
-        message: LOGGER_MESSAGES.error.helpers.checkClassExists.notFound,
-        pid: process.pid,
-        timestamp,
-      });
-
-      throw new NotFoundException({
-        message: HTTP_MESSAGES.EN.helpers.checkClassExists.status_404,
-        pid: process.pid,
-        timestamp,
-      });
-    }
-
-    let foundStudent: Client | Child;
-
-    if (foundClass.type === 'ADULTS') {
-      foundStudent = await this.prismaService.client.findFirst({
-        where: {
-          id: studentId,
-        },
-      });
-    } else {
-      foundStudent = await this.prismaService.child.findFirst({
-        where: {
-          id: studentId,
-        },
-      });
-    }
-
-    if (!foundStudent) {
-      const timestamp: string = generateTimestamp();
-
-      this.logger.error({
-        message: LOGGER_MESSAGES.error.yogaClass.addStudent.notFound,
-        pid: process.pid,
-        timestamp,
-      });
-
-      throw new NotFoundException({
-        message: HTTP_MESSAGES.EN.yogaClass.addStudent.status_404,
-        pid: process.pid,
-        timestamp,
-      });
-    }
+    await checkStudentExists(this.prismaService, foundClass.type, studentId);
 
     try {
-      let addedStudent: { studentId: string; yogaClassId: number } = {
-        studentId: '',
-        yogaClassId: 0,
-      };
       if (foundClass.type === 'ADULTS') {
-        addedStudent = await this.prismaService.yogaAdultStudent.create({
+        await this.prismaService.yogaAdultStudent.create({
           data: {
             studentId,
             yogaClassId: classId,
           },
         });
       } else {
-        addedStudent = await this.prismaService.yogaChildStudent.create({
+        await this.prismaService.yogaChildStudent.create({
           data: {
             studentId,
             yogaClassId: classId,
@@ -684,85 +631,24 @@ export class YogaclassService {
       classId,
     );
 
-    if (!foundClass) {
-      const timestamp: string = generateTimestamp();
-
-      this.logger.error({
-        message: LOGGER_MESSAGES.error.helpers.checkClassExists.notFound,
-        pid: process.pid,
-        timestamp,
-      });
-
-      throw new NotFoundException({
-        message: HTTP_MESSAGES.EN.helpers.checkClassExists.status_404,
-        pid: process.pid,
-        timestamp,
-      });
-    }
-
-    let foundStudent: Client | Child;
-
-    if (foundClass.type === 'ADULTS') {
-      foundStudent = await this.prismaService.client.findFirst({
-        where: {
-          id: studentId,
-        },
-      });
-    } else {
-      foundStudent = await this.prismaService.child.findFirst({
-        where: {
-          id: studentId,
-        },
-      });
-    }
-
-    if (!foundStudent) {
-      const timestamp: string = generateTimestamp();
-
-      this.logger.error({
-        message: LOGGER_MESSAGES.error.yogaClass.addStudent.notFound,
-        pid: process.pid,
-        timestamp,
-      });
-
-      throw new NotFoundException({
-        message: HTTP_MESSAGES.EN.yogaClass.addStudent.status_404,
-        pid: process.pid,
-        timestamp,
-      });
-    }
+    await checkStudentExists(this.prismaService, foundClass.type, studentId);
 
     try {
-      let connection: { studentId: string; yogaClassId: number };
       if (foundClass.type === 'ADULTS') {
-        connection = await this.prismaService.yogaAdultStudent.findFirst({
-          where: {
-            studentId,
-            yogaClassId: classId,
-          },
-        });
-
         await this.prismaService.yogaAdultStudent.delete({
           where: {
             yogaClassId_studentId: {
-              studentId: connection.studentId,
-              yogaClassId: connection.yogaClassId,
+              studentId,
+              yogaClassId: classId,
             },
           },
         });
       } else {
-        connection = await this.prismaService.yogaChildStudent.findFirst({
-          where: {
-            studentId,
-            yogaClassId: classId,
-          },
-        });
-
-        await this.prismaService.yogaAdultStudent.delete({
+        await this.prismaService.yogaChildStudent.delete({
           where: {
             yogaClassId_studentId: {
-              studentId: connection.studentId,
-              yogaClassId: connection.yogaClassId,
+              studentId,
+              yogaClassId: classId,
             },
           },
         });
@@ -775,6 +661,26 @@ export class YogaclassService {
       if (error instanceof NotFoundException) {
         throw error;
       }
+
+      if (error.code === 'P2025') {
+        const timestamp: string = generateTimestamp();
+
+        this.logger.error({
+          message: LOGGER_MESSAGES.error.yogaClass.deleteStudent.notFound,
+          code: error.code,
+          error: error.message,
+          stack: error.stack,
+          pid: process.pid,
+          timestamp,
+        });
+
+        throw new NotFoundException({
+          message: HTTP_MESSAGES.EN.yogaClass.deleteStudent.status_404_P2025,
+          pid: process.pid,
+          timestamp,
+        });
+      }
+
       const timestamp: string = generateTimestamp();
 
       this.logger.error({

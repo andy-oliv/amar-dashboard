@@ -1,18 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { YogaclassController } from './yogaclass.controller';
+import { YogaclassService } from './yogaclass.service';
 
 describe('YogaclassController', () => {
-  let controller: YogaclassController;
+  let yogaclassController: YogaclassController;
+  let yogaclassService: YogaclassService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [YogaclassController],
     }).compile();
 
-    controller = module.get<YogaclassController>(YogaclassController);
+    yogaclassController = module.get<YogaclassController>(YogaclassController);
+    yogaclassService = module.get<YogaclassService>(YogaclassService);
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(yogaclassController).toBeDefined();
   });
 });

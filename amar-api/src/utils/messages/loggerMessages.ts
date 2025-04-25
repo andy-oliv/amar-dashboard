@@ -176,6 +176,7 @@ const LOGGER_MESSAGES = {
         notFound: 'The class was not found or the ID is invalid.',
       },
       deleteStudent: {
+        notFound: "There's no record of the student in this class.",
         internalError:
           'An error occurred while deleting the student. Check the error log to find more information.',
       },

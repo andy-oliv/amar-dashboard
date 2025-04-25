@@ -159,6 +159,8 @@ const HTTP_MESSAGES = {
       },
       deleteStudent: {
         status_200: 'Student successfully removed from class.',
+        status_404: 'The student was not found.',
+        status_404_P2025: "There's no record of the student in the class.",
       },
       fetchClass: {
         status_200: 'Class successfully fetched.',

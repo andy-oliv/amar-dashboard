@@ -93,6 +93,26 @@ export class YogaclassController {
   }
 
   @Post('student')
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    example: HTTP_MESSAGES.EN.yogaClass.addStudent.status_200,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    example: HTTP_MESSAGES.EN.yogaClass.addStudent.status_404,
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Conflict',
+    example: HTTP_MESSAGES.EN.yogaClass.addStudent.status_409,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal error',
+    example: HTTP_MESSAGES.EN.generalMessages.status_500,
+  })
   async addStudent(
     @Body()
     { studentId, classId }: AddStudentDTO,
@@ -101,6 +121,21 @@ export class YogaclassController {
   }
 
   @Delete('student')
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    example: HTTP_MESSAGES.EN.yogaClass.deleteStudent.status_200,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    example: HTTP_MESSAGES.EN.yogaClass.deleteStudent.status_404,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal error',
+    example: HTTP_MESSAGES.EN.generalMessages.status_500,
+  })
   async removeStudent(
     @Body()
     { studentId, classId }: removeStudentDTO,
