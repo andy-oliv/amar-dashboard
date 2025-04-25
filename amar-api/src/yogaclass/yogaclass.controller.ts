@@ -17,17 +17,13 @@ import FetchClassesDTO from './dto/fetchClassesDTO';
 import FetchByRangeDTO from './dto/fetchByRangeDTO';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
 import UpdateClassDTO from './dto/updateClassDTO';
-import { Logger } from 'nestjs-pino';
 import AddStudentDTO from './dto/addStudentDTO';
 import removeStudentDTO from './dto/removeStudentDTO';
 
 @ApiTags('Yoga Classes')
 @Controller('yogaclasses')
 export class YogaclassController {
-  constructor(
-    private readonly yogaclassService: YogaclassService,
-    private readonly logger: Logger,
-  ) {}
+  constructor(private readonly yogaclassService: YogaclassService) {}
 
   @Post()
   @ApiResponse({
