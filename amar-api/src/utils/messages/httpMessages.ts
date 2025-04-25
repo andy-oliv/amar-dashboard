@@ -12,6 +12,9 @@ const HTTP_MESSAGES = {
         status_404:
           'The user was not found or the user does not have permission for this task',
       },
+      checkClassExists: {
+        status_404: 'The class was not found.',
+      },
     },
     child: {
       createChild: {
@@ -139,6 +142,11 @@ const HTTP_MESSAGES = {
       },
     },
     yogaClass: {
+      addStudent: {
+        status_200: 'Student successfully added.',
+        status_404: 'The student was not found.',
+        status_409: 'The student has already been added.',
+      },
       createClass: {
         status_201: 'Class successfully created.',
         status_400:
@@ -148,6 +156,9 @@ const HTTP_MESSAGES = {
       deleteClass: {
         status_200: 'Class successfully deleted.',
         status_404: 'Class not found.',
+      },
+      deleteStudent: {
+        status_200: 'Student successfully removed from class.',
       },
       fetchClass: {
         status_200: 'Class successfully fetched.',

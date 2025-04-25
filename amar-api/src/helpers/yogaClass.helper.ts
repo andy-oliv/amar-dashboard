@@ -3,13 +3,13 @@ import { PrismaService } from '../prisma/prisma.service';
 
 export async function checkClassExists(
   prismaService: PrismaService,
-  classInfo: YogaClass,
+  classId: number,
 ) {
   const newClass: YogaClass = await prismaService.yogaClass.findFirst({
     where: {
-      date: classInfo.date,
-      locationId: classInfo.locationId,
-      instructorId: classInfo.instructorId,
+      id: classId,
     },
   });
+
+  return newClass;
 }

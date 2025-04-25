@@ -10,6 +10,9 @@ const LOGGER_MESSAGES = {
         notFound:
           'The user was not found, the ID is incorrect or the user does not possess the required role for the task.',
       },
+      checkClassExists: {
+        notFound: 'The class was not found or the ID is invalid.',
+      },
     },
     child: {
       createChild: {
@@ -156,6 +159,13 @@ const LOGGER_MESSAGES = {
       },
     },
     yogaClass: {
+      addStudent: {
+        conflict:
+          'The student is already in this class. ID constraint violation.',
+        internalError:
+          'An error occurred while adding the student. Check the error log to find more information.',
+        notFound: 'The student was not found or the ID is invalid.',
+      },
       createClass: {
         internalError:
           'An error occurred while creating the class. Check the error log to find more information.',
@@ -164,6 +174,10 @@ const LOGGER_MESSAGES = {
         internalError:
           'An error occurred while deleting the class. Check the error log to find more information.',
         notFound: 'The class was not found or the ID is invalid.',
+      },
+      deleteStudent: {
+        internalError:
+          'An error occurred while deleting the student. Check the error log to find more information.',
       },
       fetchClasses: {
         internalError:

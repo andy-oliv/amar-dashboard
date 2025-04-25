@@ -18,6 +18,8 @@ import FetchByRangeDTO from './dto/fetchByRangeDTO';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
 import UpdateClassDTO from './dto/updateClassDTO';
 import { Logger } from 'nestjs-pino';
+import AddStudentDTO from './dto/addStudentDTO';
+import removeStudentDTO from './dto/removeStudentDTO';
 
 @ApiTags('Yoga Classes')
 @Controller('yogaclasses')
@@ -92,6 +94,22 @@ export class YogaclassController {
   })
   async fetchByRange(@Query() query: FetchByRangeDTO): Promise<EndpointReturn> {
     return this.yogaclassService.fetchByRange(query);
+  }
+
+  @Post('student')
+  async addStudent(
+    @Body()
+    { studentId, classId }: AddStudentDTO,
+  ): Promise<{ message: string }> {
+    return this.yogaclassService.addStudent(classId, studentId);
+  }
+
+  @Delete('student')
+  async removeStudent(
+    @Body()
+    { studentId, classId }: removeStudentDTO,
+  ): Promise<{ message: string }> {
+    return this.yogaclassService.removeStudent(classId, studentId);
   }
 
   @Get('queries')
