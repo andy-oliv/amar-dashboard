@@ -1,5 +1,16 @@
 const LOGGER_MESSAGES = {
   error: {
+    helpers: {
+      checkLocationById: {
+        internalError:
+          'An unexpected error occurred while checking the location ID. Please check the error log for more information.',
+        notFound: 'The location was not found or the ID is invalid.',
+      },
+      findUser: {
+        notFound:
+          'The user was not found, the ID is incorrect or the user does not possess the required role for the task.',
+      },
+    },
     child: {
       createChild: {
         conflict:
@@ -144,6 +155,39 @@ const LOGGER_MESSAGES = {
         notFound: 'The user was not found or the ID is incorrect.',
       },
     },
+    yogaClass: {
+      createClass: {
+        internalError:
+          'An error occurred while creating the class. Check the error log to find more information.',
+      },
+      deleteClass: {
+        internalError:
+          'An error occurred while deleting the class. Check the error log to find more information.',
+        notFound: 'The class was not found or the ID is invalid.',
+      },
+      fetchClasses: {
+        internalError:
+          'An error occurred while fetching the classes. Check the error log to find more information.',
+      },
+      fetchByQuery: {
+        internalError:
+          'An error occurred while fetching the classes. Check the error log to find more information.',
+      },
+      fetchByRange: {
+        internalError:
+          'An error occurred while fetching the classes. Check the error log to find more information.',
+      },
+      fetchClass: {
+        internalError:
+          'An error occurred while fetching the class. Check the error log to find more information.',
+        notFound: 'The class was not found or the ID is invalid.',
+      },
+      updateClass: {
+        internalError:
+          'An error occurred while updating the class. Check the error log to find more information.',
+        notFound: 'The class was not found or the ID is invalid.',
+      },
+    },
   },
   log: {
     child: {
@@ -209,6 +253,20 @@ const LOGGER_MESSAGES = {
       },
       fetchUser: {
         notFound: 'The user was not found or the ID is incorrect',
+      },
+    },
+    yogaClass: {
+      createclass: {
+        success: 'Class successfully created.',
+      },
+      fetchClasses: {
+        notFound: 'There are no classes to show.',
+      },
+      fetchByQuery: {
+        notFound: 'There are no classes to show.',
+      },
+      fetchByRange: {
+        notFound: 'There are no classes to show.',
       },
     },
   },

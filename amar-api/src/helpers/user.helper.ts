@@ -27,6 +27,13 @@ export async function findUser(
     where: {
       id,
     },
+    include: {
+      roles: {
+        select: {
+          roleId: true,
+        },
+      },
+    },
   });
 
   return user;

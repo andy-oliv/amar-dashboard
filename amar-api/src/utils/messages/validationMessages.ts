@@ -1,4 +1,5 @@
-import { isString, Matches } from 'class-validator';
+import { isNotEmpty, isString, Matches } from 'class-validator';
+import UpdateClassDTO from '../../yogaclass/dto/updateClassDTO';
 
 const VALIDATION_MESSAGES = {
   EN: {
@@ -135,6 +136,83 @@ const VALIDATION_MESSAGES = {
         },
         roleId: {
           isUUID: 'The roleId must be in UUID format.',
+        },
+      },
+    },
+    yogaClass: {
+      createYogaClassDTO: {
+        type: {
+          IsIn: 'Please check the type value. It is not valid',
+          isNotEmpty: 'The type field must not be blank.',
+        },
+        status: {
+          IsIn: 'Please check the status value. It is not valid',
+          isNotEmpty: 'The status field must not be blank.',
+        },
+        locationId: {
+          isNumber: 'the locationId must be a number',
+          isNotEmpty: 'The locationId field must not be blank.',
+        },
+        date: {
+          isDateString: 'The date field must be a valid date string.',
+          isNotEmpty: 'The date field must not be blank.',
+        },
+        time: {
+          isNotEmpty: 'The time field cannot be blank.',
+          matches:
+            'Invalid time. The string needs to follow the format HH:mm:ss in 24 hours',
+        },
+        InstructorId: {
+          isUUID: 'The instructor ID must be a UUID.',
+          isNotEmpty: 'The instructorId field must not be blank.',
+        },
+      },
+      fetchClassesDTO: {
+        type: {
+          IsIn: 'Please check the type value. It is not valid',
+        },
+        status: {
+          IsIn: 'Please check the status value. It is not valid',
+        },
+        locationId: {
+          isNumber: 'the locationId must be a number',
+        },
+        date: {
+          isDateString: 'The date field must be a valid date string.',
+        },
+        InstructorId: {
+          isUUID: 'The instructor ID must be a UUID.',
+        },
+      },
+      fetchByRangeDTO: {
+        rangeStart: {
+          isNotEmpty: 'The rangeStart field must not be empty.',
+          isDateString: 'The rangeStart field must be a valid date string.',
+        },
+        rangeEnd: {
+          isNotEmpty: 'The rangeEnd field must not be empty.',
+          isDateString: 'The rangeEnd field must be a valid date string.',
+        },
+      },
+      updateClassDTO: {
+        type: {
+          IsIn: 'Please check the type value. It is not valid',
+        },
+        status: {
+          IsIn: 'Please check the status value. It is not valid',
+        },
+        locationId: {
+          isNumber: 'the locationId must be a number',
+        },
+        date: {
+          isDateString: 'The date field must be a valid date string.',
+        },
+        time: {
+          matches:
+            'Invalid time. The string needs to follow the format HH:mm:ss in 24 hours',
+        },
+        InstructorId: {
+          isUUID: 'The instructor ID must be a UUID.',
         },
       },
     },

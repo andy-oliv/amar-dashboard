@@ -1,3 +1,5 @@
+import Role from './Role';
+
 export interface User {
   id?: string;
   name: string;
@@ -5,4 +7,5 @@ export interface User {
   password: string;
   pictureUrl?: string;
   roleId?: string[];
+  roles?: { roleId: string }[];
 }

@@ -9,5 +9,6 @@ export default interface YogaClass {
   status: YogaClassStatus;
   locationId: number;
   date: Date;
+  time?: string | Date;
   instructorId: string;
 }

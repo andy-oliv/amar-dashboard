@@ -4,6 +4,15 @@ const HTTP_MESSAGES = {
       status_500:
         'An unexpected error occurred. Please check the error log for more information.',
     },
+    helpers: {
+      checkLocationById: {
+        status_404: 'The location was not found.',
+      },
+      findUser: {
+        status_404:
+          'The user was not found or the user does not have permission for this task',
+      },
+    },
     child: {
       createChild: {
         status_201: 'Child successfully registered.',
@@ -127,6 +136,40 @@ const HTTP_MESSAGES = {
       deleteUser: {
         status_200: 'User successfully deleted.',
         status_404: 'The user was not found.',
+      },
+    },
+    yogaClass: {
+      createClass: {
+        status_201: 'Class successfully created.',
+        status_400:
+          'Invalid date: yoga classes cannot be scheduled for past dates.',
+        status_409: 'The class already exists.',
+      },
+      deleteClass: {
+        status_200: 'Class successfully deleted.',
+        status_404: 'Class not found.',
+      },
+      fetchClass: {
+        status_200: 'Class successfully fetched.',
+        status_404: 'The class was not found.',
+      },
+      fetchClasses: {
+        status_200: 'Classes successfully fetched.',
+        status_404: 'There are no classes to show.',
+      },
+      fetchByQuery: {
+        status_200: 'Classes successfully fetched.',
+        status_404: 'There are no classes to show.',
+      },
+      fetchByRange: {
+        status_200: 'Classes successfully fetched.',
+        status_404: 'There are no classes to show.',
+      },
+      updateClass: {
+        status_200: 'Class successfully updated.',
+        status_404: 'Class not found.',
+        status_400:
+          'Invalid date: yoga classes cannot be scheduled for past dates.',
       },
     },
   },
