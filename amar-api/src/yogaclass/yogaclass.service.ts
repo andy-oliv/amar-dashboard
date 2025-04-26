@@ -23,6 +23,7 @@ import CreateClassDTO from './dto/createClassDTO';
 import UpdateClassDTO from './dto/updateClassDTO';
 import {
   checkClassExists,
+  checkinstructorRoles,
   checkStudentExists,
 } from '../helpers/yogaClass.helper';
 
@@ -34,31 +35,7 @@ export class YogaclassService {
   ) {}
 
   async createClass(classinfo: CreateClassDTO): Promise<EndpointReturn> {
-    const instructor: User = await findUser(
-      this.prismaService,
-      classinfo.instructorId,
-    );
-
-    let instructorRoles: string[] = instructor.roles.map((role) => role.roleId);
-
-    if (
-      instructorRoles.length === 0 ||
-      !instructorRoles.includes(process.env.YOGA_INSTRUCTOR_ROLE_ID)
-    ) {
-      const timestamp: string = generateTimestamp();
-
-      this.logger.error({
-        message: LOGGER_MESSAGES.error.helpers.findUser.notFound,
-        pid: process.pid,
-        timestamp,
-      });
-
-      throw new NotFoundException({
-        message: HTTP_MESSAGES.EN.helpers.findUser.status_404,
-        pid: process.pid,
-        timestamp,
-      });
-    }
+    await checkinstructorRoles(this.prismaService, classinfo.instructorId);
 
     await checkLocationById(
       this.prismaService,
@@ -506,12 +483,13 @@ export class YogaclassService {
 
   async deleteClass(classId: number): Promise<EndpointReturn> {
     try {
-      const deletedClass: YogaClass =
-        await this.prismaService.yogaClass.findUniqueOrThrow({
+      const deletedClass: YogaClass = await this.prismaService.yogaClass.delete(
+        {
           where: {
             id: classId,
           },
-        });
+        },
+      );
 
       return {
         message: HTTP_MESSAGES.EN.yogaClass.deleteClass.status_200,
