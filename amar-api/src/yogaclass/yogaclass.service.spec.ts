@@ -18,6 +18,14 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '../../prisma/generated/prisma-client-js/runtime/library';
+import { Prisma } from '../../prisma/generated/prisma-client-js';
+import LOGGER_MESSAGES from '../utils/messages/loggerMessages';
+import generateTimestamp from '../helpers/generateTimestamp';
+import * as dayjs from 'dayjs';
+import FetchClassesDTO from './dto/fetchClassesDTO';
+import FetchByRangeDTO from './dto/fetchByRangeDTO';
+import UpdateClassDTO from './dto/updateClassDTO';
 
 jest.mock('../helpers/yogaClass.helper');
 jest.mock('../helpers/location.helper');
@@ -243,6 +251,11 @@ describe('YogaclassService', () => {
         locationId: faker.number.int(),
       };
       const randomDate: Date = faker.date.soon();
+      const error = {
+        code: '',
+        message: '',
+        stack: '',
+      };
 
       (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
       (checkLocationById as jest.Mock).mockResolvedValue(undefined);
@@ -250,6 +263,14 @@ describe('YogaclassService', () => {
         new InternalServerErrorException(),
       );
       (parseIsoString as jest.Mock).mockReturnValue(randomDate);
+      (logger.error as jest.Mock).mockReturnValue({
+        message: LOGGER_MESSAGES.error.yogaClass.createClass.internalError,
+        code: error.code,
+        error: error.message,
+        stack: error.stack,
+        pid: process.pid,
+        timestamp: generateTimestamp(),
+      });
 
       await expect(yogaclassService.createClass(yogaClass)).rejects.toThrow(
         InternalServerErrorException,
@@ -280,6 +301,8 @@ describe('YogaclassService', () => {
         yogaClass.date,
         yogaClass.time,
       );
+
+      expect(logger.error).toHaveBeenCalled();
     });
   });
 
@@ -301,6 +324,414 @@ describe('YogaclassService', () => {
       });
 
       expect(prismaService.yogaClass.findMany).toHaveBeenCalled();
+    });
+
+    it('should throw a not found exception', async () => {
+      const yogaClasses: YogaClass[] = [];
+
+      (prismaService.yogaClass.findMany as jest.Mock).mockResolvedValue(
+        yogaClasses,
+      );
+
+      (logger.log as jest.Mock).mockReturnValue({
+        message: LOGGER_MESSAGES.log.yogaClass.fetchClasses.notFound,
+        pid: process.pid,
+        timestamp: generateTimestamp(),
+      });
+
+      await expect(yogaclassService.fetchClasses()).rejects.toThrow(
+        NotFoundException,
+      );
+
+      expect(prismaService.yogaClass.findMany).toHaveBeenCalled();
+
+      expect(logger.log).toHaveBeenCalled();
+    });
+
+    it('should throw an internal server error', async () => {
+      const error: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('Record not found', {
+          code: 'P2025',
+          clientVersion: 'mock-client-version',
+        });
+
+      const errorLog = {
+        code: '',
+        message: '',
+        stack: '',
+      };
+
+      (prismaService.yogaClass.findMany as jest.Mock).mockRejectedValue(error);
+
+      (logger.error as jest.Mock).mockReturnValue({
+        message: LOGGER_MESSAGES.error.yogaClass.fetchClasses.internalError,
+        code: errorLog.code,
+        error: errorLog.message,
+        stack: errorLog.stack,
+        pid: process.pid,
+        timestamp: generateTimestamp(),
+      });
+
+      await expect(yogaclassService.fetchClasses()).rejects.toThrow(
+        InternalServerErrorException,
+      );
+
+      expect(prismaService.yogaClass.findMany).toHaveBeenCalled();
+
+      expect(logger.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('fetchClass()', () => {
+    it('should fetch a class', async () => {
+      const fetchedClass: YogaClass = generateMockYogaClass();
+
+      (
+        prismaService.yogaClass.findUniqueOrThrow as jest.Mock
+      ).mockResolvedValue(fetchedClass);
+
+      const result: EndpointReturn = await yogaclassService.fetchClass(
+        fetchedClass.id,
+      );
+
+      expect(result).toMatchObject({
+        message: HTTP_MESSAGES.EN.yogaClass.fetchClass.status_200,
+        data: fetchedClass,
+      });
+
+      expect(prismaService.yogaClass.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          id: fetchedClass.id,
+        },
+        include: {
+          adultStudents: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
+            },
+          },
+          childStudents: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  name: true,
+                  parents: {
+                    include: {
+                      client: {
+                        select: {
+                          id: true,
+                          name: true,
+                          email: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          instructor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              pictureUrl: true,
+            },
+          },
+          location: {
+            select: {
+              id: true,
+              name: true,
+              address: true,
+              neighborhood: true,
+              city: true,
+            },
+          },
+          rollCall: true,
+          transactions: true,
+        },
+      });
+    });
+
+    it('should throw a not found exception', async () => {
+      const fetchedClass: YogaClass = generateMockYogaClass();
+      const error: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('Record not found', {
+          code: 'P2025',
+          clientVersion: 'mock-version',
+        });
+
+      (
+        prismaService.yogaClass.findUniqueOrThrow as jest.Mock
+      ).mockRejectedValue(error);
+
+      (logger.error as jest.Mock).mockReturnValue({
+        message: LOGGER_MESSAGES.error.yogaClass.fetchClass.notFound,
+        pid: process.pid,
+        timestamp: generateTimestamp(),
+      });
+
+      await expect(
+        yogaclassService.fetchClass(fetchedClass.id),
+      ).rejects.toThrow(NotFoundException);
+
+      expect(prismaService.yogaClass.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          id: fetchedClass.id,
+        },
+        include: {
+          adultStudents: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
+            },
+          },
+          childStudents: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  name: true,
+                  parents: {
+                    include: {
+                      client: {
+                        select: {
+                          id: true,
+                          name: true,
+                          email: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          instructor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              pictureUrl: true,
+            },
+          },
+          location: {
+            select: {
+              id: true,
+              name: true,
+              address: true,
+              neighborhood: true,
+              city: true,
+            },
+          },
+          rollCall: true,
+          transactions: true,
+        },
+      });
+
+      expect(logger.error).toHaveBeenCalled();
+    });
+
+    it('should throw an internal server error', async () => {
+      const fetchedClass: YogaClass = generateMockYogaClass();
+      const error: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('PrismaValidationError', {
+          code: 'P2002',
+          clientVersion: 'mock-version',
+        });
+      const errorLog = {
+        code: '',
+        message: '',
+        stack: '',
+      };
+
+      (
+        prismaService.yogaClass.findUniqueOrThrow as jest.Mock
+      ).mockRejectedValue(error);
+
+      (logger.error as jest.Mock).mockReturnValue({
+        message: LOGGER_MESSAGES.error.yogaClass.fetchClass.internalError,
+        code: errorLog.code,
+        error: errorLog.message,
+        stack: errorLog.stack,
+      });
+
+      await expect(
+        yogaclassService.fetchClass(fetchedClass.id),
+      ).rejects.toThrow(InternalServerErrorException);
+
+      expect(prismaService.yogaClass.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          id: fetchedClass.id,
+        },
+        include: {
+          adultStudents: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
+            },
+          },
+          childStudents: {
+            include: {
+              student: {
+                select: {
+                  id: true,
+                  name: true,
+                  parents: {
+                    include: {
+                      client: {
+                        select: {
+                          id: true,
+                          name: true,
+                          email: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          instructor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              pictureUrl: true,
+            },
+          },
+          location: {
+            select: {
+              id: true,
+              name: true,
+              address: true,
+              neighborhood: true,
+              city: true,
+            },
+          },
+          rollCall: true,
+          transactions: true,
+        },
+      });
+      expect(logger.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('updateClass()', () => {
+    it('should update a class', async () => {
+      const foundClass: YogaClass = generateMockYogaClass();
+      const updatedClass: UpdateClassDTO = {
+        type: getRandomString(['ADULTS', 'CHILDREN']),
+        status: getRandomString([
+          'SCHEDULED',
+          'RESCHEDULED',
+          'DONE',
+          'CANCELLED',
+        ]),
+        date: faker.date.soon(),
+        time: faker.date.soon().toTimeString().split(' ')[0],
+        instructorId: faker.string.uuid(),
+        locationId: faker.number.int(),
+      };
+
+      (prismaService.yogaClass.findFirst as jest.Mock).mockResolvedValue(
+        foundClass,
+      );
+      (prismaService.yogaClass.update as jest.Mock).mockResolvedValue(
+        updatedClass,
+      );
+      (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
+      (checkLocationById as jest.Mock).mockResolvedValue(undefined);
+
+      const result: EndpointReturn = await yogaclassService.updateClass(
+        foundClass.id,
+        updatedClass,
+      );
+      expect(result).toMatchObject({
+        message: HTTP_MESSAGES.EN.yogaClass.updateClass.status_200,
+        data: updatedClass,
+      });
+
+      expect(prismaService.yogaClass.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+      });
+      expect(prismaService.yogaClass.update).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+        data: {
+          type: updatedClass.type,
+          status: updatedClass.status,
+          date: parseIsoString(
+            updatedClass.date ? updatedClass.date : foundClass.date,
+            updatedClass.time
+              ? updatedClass.time
+              : dayjs(foundClass.date).format('HH:mm:ss'),
+          ),
+          instructorId: updatedClass.instructorId,
+          locationId: updatedClass.locationId,
+        },
+      });
+      expect(checkinstructorRoles).toHaveBeenCalledWith(
+        prismaService,
+        updatedClass.instructorId,
+      );
+      expect(checkLocationById).toHaveBeenCalledWith(
+        prismaService,
+        logger,
+        updatedClass.locationId,
+      );
+    });
+
+    it('should throw a not found exception for not finding the class', async () => {
+      const foundClass: YogaClass = generateMockYogaClass();
+
+      const updatedClass: UpdateClassDTO = {
+        type: getRandomString(['ADULTS', 'CHILDREN']),
+        status: getRandomString([
+          'SCHEDULED',
+          'RESCHEDULED',
+          'DONE',
+          'CANCELLED',
+        ]),
+
+        date: faker.date.soon(),
+        time: faker.date.soon().toTimeString().split(' ')[0],
+        instructorId: faker.string.uuid(),
+        locationId: faker.number.int(),
+      };
+
+      (prismaService.yogaClass.findFirst as jest.Mock).mockRejectedValue(
+        new NotFoundException(),
+      );
+
+      await expect(
+        yogaclassService.updateClass(foundClass.id, updatedClass),
+      ).rejects.toThrow(NotFoundException);
+
+      expect(prismaService.yogaClass.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+      });
     });
   });
 });

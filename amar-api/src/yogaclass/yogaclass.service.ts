@@ -390,33 +390,7 @@ export class YogaclassService {
     }
 
     if (classData.instructorId) {
-      const instructor: User = await findUser(
-        this.prismaService,
-        classData.instructorId,
-      );
-
-      let instructorRoles: string[] = instructor.roles.map(
-        (role) => role.roleId,
-      );
-
-      if (
-        instructorRoles.length === 0 ||
-        !instructorRoles.includes(process.env.YOGA_INSTRUCTOR_ROLE_ID)
-      ) {
-        const timestamp: string = generateTimestamp();
-
-        this.logger.error({
-          message: LOGGER_MESSAGES.error.helpers.findUser.notFound,
-          pid: process.pid,
-          timestamp,
-        });
-
-        throw new NotFoundException({
-          message: HTTP_MESSAGES.EN.helpers.findUser.status_404,
-          pid: process.pid,
-          timestamp,
-        });
-      }
+      checkinstructorRoles(this.prismaService, classData.instructorId);
     }
 
     if (classData.locationId) {
