@@ -15,7 +15,7 @@ export default function generateMockYogaClass(): YogaClass {
   return newClass;
 }
 
-function getRandomString(values: string[]): any {
+export function getRandomString(values: string[]): any {
   const randomIndex: number = Math.floor(Math.random() * values.length);
   const randomValue: string = values[randomIndex];
   return randomValue;
