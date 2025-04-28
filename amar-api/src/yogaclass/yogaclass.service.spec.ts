@@ -3,8 +3,10 @@ import { YogaclassService } from './yogaclass.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { Logger } from 'nestjs-pino';
 import {
+  checkClassExists,
   checkDateIsPast,
   checkinstructorRoles,
+  checkStudentExists,
 } from '../helpers/yogaClass.helper';
 import { checkLocationById } from '../helpers/location.helper';
 import YogaClass from '../interfaces/YogaClass';
@@ -29,6 +31,8 @@ import * as dayjs from 'dayjs';
 import FetchClassesDTO from './dto/fetchClassesDTO';
 import FetchByRangeDTO from './dto/fetchByRangeDTO';
 import UpdateClassDTO from './dto/updateClassDTO';
+import Client from '../interfaces/Client';
+import generateMockClient from '../utils/mocks/generateMockClients';
 
 jest.mock('../helpers/yogaClass.helper');
 jest.mock('../helpers/location.helper');
@@ -963,6 +967,120 @@ describe('YogaclassService', () => {
   });
 
   describe('deleteClass()', () => {
-    it('should delete a class', async () => {});
+    it('should delete a class', async () => {
+      const yogaClass: YogaClass = generateMockYogaClass();
+
+      (prismaService.yogaClass.delete as jest.Mock).mockResolvedValue(
+        yogaClass,
+      );
+
+      const result: EndpointReturn = await yogaclassService.deleteClass(
+        yogaClass.id,
+      );
+
+      expect(result).toMatchObject({
+        message: HTTP_MESSAGES.EN.yogaClass.deleteClass.status_200,
+        data: yogaClass,
+      });
+
+      expect(prismaService.yogaClass.delete).toHaveBeenCalledWith({
+        where: {
+          id: yogaClass.id,
+        },
+      });
+    });
+
+    it('should throw a not found exception', async () => {
+      const yogaClass: YogaClass = generateMockYogaClass();
+      const prismaError: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('Record not found', {
+          code: 'P2025',
+          clientVersion: 'mock-version',
+        });
+
+      (prismaService.yogaClass.delete as jest.Mock).mockRejectedValue(
+        prismaError,
+      );
+
+      await expect(yogaclassService.deleteClass(yogaClass.id)).rejects.toThrow(
+        NotFoundException,
+      );
+
+      expect(prismaService.yogaClass.delete).toHaveBeenCalledWith({
+        where: {
+          id: yogaClass.id,
+        },
+      });
+    });
+
+    it('should throw an internal server error', async () => {
+      const yogaClass: YogaClass = generateMockYogaClass();
+      const prismaError: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('PrismaValidationError', {
+          code: 'P2002',
+          clientVersion: 'mock-version',
+        });
+
+      (prismaService.yogaClass.delete as jest.Mock).mockRejectedValue(
+        prismaError,
+      );
+
+      await expect(yogaclassService.deleteClass(yogaClass.id)).rejects.toThrow(
+        InternalServerErrorException,
+      );
+
+      expect(prismaService.yogaClass.delete).toHaveBeenCalledWith({
+        where: {
+          id: yogaClass.id,
+        },
+      });
+    });
+  });
+
+  describe('addStudent()', () => {
+    it('should add a new student to a class', async () => {
+      const foundClass: YogaClass = generateMockYogaClass();
+      const newStudent: Client = generateMockClient();
+
+      (checkClassExists as jest.Mock).mockResolvedValue(foundClass);
+      (checkStudentExists as jest.Mock).mockResolvedValue(undefined);
+      (prismaService.yogaAdultStudent.create as jest.Mock).mockResolvedValue(
+        newStudent,
+      );
+      (prismaService.yogaChildStudent.create as jest.Mock).mockResolvedValue(
+        newStudent,
+      );
+
+      const result: { message: string } = await yogaclassService.addStudent(
+        foundClass.id,
+        newStudent.id,
+      );
+
+      expect(result).toMatchObject({
+        message: HTTP_MESSAGES.EN.yogaClass.addStudent.status_200,
+      });
+
+      expect(checkClassExists).toHaveBeenCalledWith(
+        prismaService,
+        foundClass.id,
+      );
+      expect(checkStudentExists).toHaveBeenCalled();
+
+      if (foundClass.type === 'ADULTS') {
+        expect(prismaService.yogaAdultStudent.create).toHaveBeenCalledWith({
+          data: {
+            studentId: newStudent.id,
+            yogaClassId: foundClass.id,
+          },
+        });
+      } else {
+        expect(prismaService.yogaChildStudent.create).toHaveBeenCalledWith({
+          data: {
+            studentId: newStudent.id,
+            yogaClassId: foundClass.id,
+          },
+        });
+      }
+    });
   });
 });
