@@ -10,8 +10,6 @@ import { Logger } from 'nestjs-pino';
 import YogaClass from '../interfaces/YogaClass';
 import EndpointReturn from '../interfaces/EndpointReturn';
 import { checkLocationById } from '../helpers/location.helper';
-import { findUser } from '../helpers/user.helper';
-import { User } from '../interfaces/User';
 import generateTimestamp from '../helpers/generateTimestamp';
 import LOGGER_MESSAGES from '../utils/messages/loggerMessages';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
@@ -23,6 +21,7 @@ import CreateClassDTO from './dto/createClassDTO';
 import UpdateClassDTO from './dto/updateClassDTO';
 import {
   checkClassExists,
+  checkDateIsPast,
   checkinstructorRoles,
   checkStudentExists,
 } from '../helpers/yogaClass.helper';
@@ -43,13 +42,7 @@ export class YogaclassService {
       classinfo.locationId,
     );
 
-    if (dayjs(classinfo.date).isBefore(dayjs())) {
-      throw new BadRequestException({
-        message: HTTP_MESSAGES.EN.yogaClass.createClass.status_400,
-        pid: process.pid,
-        timestamp: generateTimestamp(),
-      });
-    }
+    await checkDateIsPast(classinfo.date);
 
     try {
       const newClass: YogaClass = await this.prismaService.yogaClass.create({
@@ -390,7 +383,7 @@ export class YogaclassService {
     }
 
     if (classData.instructorId) {
-      checkinstructorRoles(this.prismaService, classData.instructorId);
+      await checkinstructorRoles(this.prismaService, classData.instructorId);
     }
 
     if (classData.locationId) {
@@ -402,13 +395,7 @@ export class YogaclassService {
     }
 
     if (classData.date) {
-      if (dayjs(classData.date).isBefore(dayjs())) {
-        throw new BadRequestException({
-          message: HTTP_MESSAGES.EN.yogaClass.updateClass.status_400,
-          pid: process.pid,
-          timestamp: generateTimestamp(),
-        });
-      }
+      await checkDateIsPast(classData.date);
     }
 
     try {

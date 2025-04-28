@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import YogaClass from '../interfaces/YogaClass';
 import { PrismaService } from '../prisma/prisma.service';
 import HTTP_MESSAGES from '../utils/messages/httpMessages';
@@ -8,6 +8,7 @@ import { Child, Client } from '../../prisma/generated/prisma-client-js';
 import Role from '../interfaces/Role';
 import { findUser } from './user.helper';
 import { User } from '../interfaces/User';
+import dayjs from 'dayjs';
 
 export async function checkClassExists(
   prismaService: PrismaService,
@@ -104,6 +105,16 @@ export async function checkinstructorRoles(
       message: HTTP_MESSAGES.EN.helpers.findUser.status_404,
       pid: process.pid,
       timestamp,
+    });
+  }
+}
+
+export async function checkDateIsPast(date: string | Date): Promise<void> {
+  if (dayjs(date).isBefore(dayjs())) {
+    throw new BadRequestException({
+      message: HTTP_MESSAGES.EN.yogaClass.updateClass.status_400,
+      pid: process.pid,
+      timestamp: generateTimestamp(),
     });
   }
 }

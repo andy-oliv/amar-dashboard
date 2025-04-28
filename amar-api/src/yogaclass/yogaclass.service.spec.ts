@@ -2,7 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { YogaclassService } from './yogaclass.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { Logger } from 'nestjs-pino';
-import { checkinstructorRoles } from '../helpers/yogaClass.helper';
+import {
+  checkDateIsPast,
+  checkinstructorRoles,
+} from '../helpers/yogaClass.helper';
 import { checkLocationById } from '../helpers/location.helper';
 import YogaClass from '../interfaces/YogaClass';
 import generateMockYogaClass, {
@@ -220,6 +223,9 @@ describe('YogaclassService', () => {
 
       (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
       (checkLocationById as jest.Mock).mockResolvedValue(undefined);
+      (checkDateIsPast as jest.Mock).mockRejectedValue(
+        new BadRequestException(),
+      );
 
       await expect(yogaclassService.createClass(yogaClass)).rejects.toThrow(
         BadRequestException,
@@ -234,6 +240,8 @@ describe('YogaclassService', () => {
         logger,
         yogaClass.locationId,
       );
+
+      expect(checkDateIsPast).toHaveBeenCalledWith(yogaClass.date);
     });
 
     it('should throw an internal error', async () => {
@@ -259,6 +267,7 @@ describe('YogaclassService', () => {
 
       (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
       (checkLocationById as jest.Mock).mockResolvedValue(undefined);
+      (checkDateIsPast as jest.Mock).mockResolvedValue(undefined);
       (prismaService.yogaClass.create as jest.Mock).mockRejectedValue(
         new InternalServerErrorException(),
       );
@@ -286,6 +295,8 @@ describe('YogaclassService', () => {
         logger,
         yogaClass.locationId,
       );
+
+      expect(checkDateIsPast).toHaveBeenCalledWith(yogaClass.date);
 
       expect(prismaService.yogaClass.create).toHaveBeenCalledWith({
         data: {
@@ -658,6 +669,7 @@ describe('YogaclassService', () => {
       );
       (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
       (checkLocationById as jest.Mock).mockResolvedValue(undefined);
+      (checkDateIsPast as jest.Mock).mockResolvedValue(undefined);
 
       const result: EndpointReturn = await yogaclassService.updateClass(
         foundClass.id,
@@ -690,15 +702,19 @@ describe('YogaclassService', () => {
           locationId: updatedClass.locationId,
         },
       });
+
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
         updatedClass.instructorId,
       );
+
       expect(checkLocationById).toHaveBeenCalledWith(
         prismaService,
         logger,
         updatedClass.locationId,
       );
+
+      expect(checkDateIsPast).toHaveBeenCalledWith(updatedClass.date);
     });
 
     it('should throw a not found exception for not finding the class', async () => {
@@ -733,5 +749,220 @@ describe('YogaclassService', () => {
         },
       });
     });
+
+    it('should throw a not found exception for not finding the correct role for the instructor', async () => {
+      const foundClass: YogaClass = generateMockYogaClass();
+      const updatedClass: UpdateClassDTO = {
+        type: getRandomString(['ADULTS', 'CHILDREN']),
+        status: getRandomString([
+          'SCHEDULED',
+          'RESCHEDULED',
+          'DONE',
+          'CANCELLED',
+        ]),
+        date: faker.date.soon(),
+        time: faker.date.soon().toTimeString().split(' ')[0],
+        instructorId: faker.string.uuid(),
+        locationId: faker.number.int(),
+      };
+
+      (prismaService.yogaClass.findFirst as jest.Mock).mockResolvedValue(
+        foundClass,
+      );
+
+      (checkinstructorRoles as jest.Mock).mockRejectedValue(
+        new NotFoundException(),
+      );
+
+      await expect(
+        yogaclassService.updateClass(foundClass.id, updatedClass),
+      ).rejects.toThrow(NotFoundException);
+
+      expect(prismaService.yogaClass.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+      });
+
+      expect(checkinstructorRoles).toHaveBeenCalledWith(
+        prismaService,
+        updatedClass.instructorId,
+      );
+    });
+
+    it('should throw a not found exception for not finding the location', async () => {
+      const foundClass: YogaClass = generateMockYogaClass();
+      const updatedClass: UpdateClassDTO = {
+        type: getRandomString(['ADULTS', 'CHILDREN']),
+        status: getRandomString([
+          'SCHEDULED',
+          'RESCHEDULED',
+          'DONE',
+          'CANCELLED',
+        ]),
+        date: faker.date.soon(),
+        time: faker.date.soon().toTimeString().split(' ')[0],
+        instructorId: faker.string.uuid(),
+        locationId: faker.number.int(),
+      };
+
+      (prismaService.yogaClass.findFirst as jest.Mock).mockResolvedValue(
+        foundClass,
+      );
+
+      (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
+      (checkLocationById as jest.Mock).mockRejectedValue(
+        new NotFoundException(),
+      );
+
+      await expect(
+        yogaclassService.updateClass(foundClass.id, updatedClass),
+      ).rejects.toThrow(NotFoundException);
+
+      expect(prismaService.yogaClass.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+      });
+
+      expect(checkinstructorRoles).toHaveBeenCalledWith(
+        prismaService,
+        updatedClass.instructorId,
+      );
+
+      expect(checkLocationById).toHaveBeenCalledWith(
+        prismaService,
+        logger,
+        updatedClass.locationId,
+      );
+    });
+
+    it('should throw a bad request exception because the date is in the past', async () => {
+      const foundClass: YogaClass = generateMockYogaClass();
+      const updatedClass: UpdateClassDTO = {
+        type: getRandomString(['ADULTS', 'CHILDREN']),
+        status: getRandomString([
+          'SCHEDULED',
+          'RESCHEDULED',
+          'DONE',
+          'CANCELLED',
+        ]),
+        date: faker.date.past(),
+        time: faker.date.soon().toTimeString().split(' ')[0],
+        instructorId: faker.string.uuid(),
+        locationId: faker.number.int(),
+      };
+
+      (prismaService.yogaClass.findFirst as jest.Mock).mockResolvedValue(
+        foundClass,
+      );
+
+      (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
+      (checkLocationById as jest.Mock).mockResolvedValue(undefined);
+      (checkDateIsPast as jest.Mock).mockRejectedValue(
+        new BadRequestException(),
+      );
+
+      await expect(
+        yogaclassService.updateClass(foundClass.id, updatedClass),
+      ).rejects.toThrow(BadRequestException);
+
+      expect(prismaService.yogaClass.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+      });
+
+      expect(checkinstructorRoles).toHaveBeenCalledWith(
+        prismaService,
+        updatedClass.instructorId,
+      );
+
+      expect(checkLocationById).toHaveBeenCalledWith(
+        prismaService,
+        logger,
+        updatedClass.locationId,
+      );
+
+      expect(checkDateIsPast).toHaveBeenCalledWith(updatedClass.date);
+    });
+
+    it('should throw an internal error', async () => {
+      const foundClass: YogaClass = generateMockYogaClass();
+      const updatedClass: UpdateClassDTO = {
+        type: getRandomString(['ADULTS', 'CHILDREN']),
+        status: getRandomString([
+          'SCHEDULED',
+          'RESCHEDULED',
+          'DONE',
+          'CANCELLED',
+        ]),
+        date: faker.date.soon(),
+        time: faker.date.soon().toTimeString().split(' ')[0],
+        instructorId: faker.string.uuid(),
+        locationId: faker.number.int(),
+      };
+      const prismaError: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('PrismaValidationError', {
+          code: 'P2002',
+          clientVersion: 'mock-version',
+        });
+
+      (prismaService.yogaClass.findFirst as jest.Mock).mockResolvedValue(
+        foundClass,
+      );
+
+      (checkinstructorRoles as jest.Mock).mockResolvedValue(undefined);
+      (checkLocationById as jest.Mock).mockResolvedValue(undefined);
+      (checkDateIsPast as jest.Mock).mockResolvedValue(undefined);
+      (prismaService.yogaClass.update as jest.Mock).mockRejectedValue(
+        prismaError,
+      );
+
+      await expect(
+        yogaclassService.updateClass(foundClass.id, updatedClass),
+      ).rejects.toThrow(InternalServerErrorException);
+
+      expect(prismaService.yogaClass.findFirst).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+      });
+
+      expect(checkinstructorRoles).toHaveBeenCalledWith(
+        prismaService,
+        updatedClass.instructorId,
+      );
+
+      expect(checkLocationById).toHaveBeenCalledWith(
+        prismaService,
+        logger,
+        updatedClass.locationId,
+      );
+
+      expect(checkDateIsPast).toHaveBeenCalledWith(updatedClass.date);
+
+      expect(prismaService.yogaClass.update).toHaveBeenCalledWith({
+        where: {
+          id: foundClass.id,
+        },
+        data: {
+          type: updatedClass.type,
+          status: updatedClass.status,
+          date: parseIsoString(
+            updatedClass.date ? updatedClass.date : foundClass.date,
+            updatedClass.time
+              ? updatedClass.time
+              : dayjs(foundClass.date).format('HH:mm:ss'),
+          ),
+          instructorId: updatedClass.instructorId,
+          locationId: updatedClass.locationId,
+        },
+      });
+    });
+  });
+
+  describe('deleteClass()', () => {
+    it('should delete a class', async () => {});
   });
 });
