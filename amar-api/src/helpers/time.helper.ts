@@ -21,3 +21,10 @@ export function parseIsoString(
 export function parseLocalTime(datetime: string) {
   return dayjs(datetime).utcOffset(-180).format('DD/MM/YYYY HH:mm:ss');
 }
+
+export function dateRange(date: string): { startRange: Date; endRange: Date } {
+  return {
+    startRange: dayjs(date).startOf('day').toDate(),
+    endRange: dayjs(date).endOf('day').toDate(),
+  };
+}

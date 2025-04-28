@@ -16,7 +16,7 @@ import HTTP_MESSAGES from '../utils/messages/httpMessages';
 import * as dayjs from 'dayjs';
 import FetchClassesDTO from './dto/fetchClassesDTO';
 import FetchByRangeDTO from './dto/fetchByRangeDTO';
-import { parseIsoString } from '../helpers/time.helper';
+import { dateRange, parseIsoString } from '../helpers/time.helper';
 import CreateClassDTO from './dto/createClassDTO';
 import UpdateClassDTO from './dto/updateClassDTO';
 import {
@@ -131,8 +131,10 @@ export class YogaclassService {
   async fetchByQuery(query: FetchClassesDTO): Promise<EndpointReturn> {
     try {
       let parsedDate: string;
+      let range: { startRange: Date; endRange: Date };
       if (query.date) {
         parsedDate = parseIsoString(query.date);
+        range = dateRange(parsedDate);
       }
 
       const classes: YogaClass[] = await this.prismaService.yogaClass.findMany({
@@ -142,8 +144,8 @@ export class YogaclassService {
             { status: query.status },
             {
               date: {
-                gte: dayjs(parsedDate).startOf('day').toDate(),
-                lte: dayjs(parsedDate).endOf('day').toDate(),
+                gte: range.startRange,
+                lte: range.endRange,
               },
             },
             { instructorId: query.instructorId },
