@@ -463,6 +463,236 @@ describe('YogaclassService', () => {
         },
       });
     });
+
+    it('should throw a not found exception', async () => {
+      const classes: YogaClass[] = [];
+
+      const query: FetchClassesDTO = {
+        type: undefined,
+        status: undefined,
+        date: faker.date.soon(),
+        instructorId: undefined,
+        locationId: undefined,
+      };
+
+      const mockRange = {
+        startRange: new Date(query.date),
+        endRange: new Date(query.date),
+      };
+
+      (parseIsoString as jest.Mock).mockReturnValue(query.date);
+      (dateRange as jest.Mock).mockReturnValue(mockRange);
+      (prismaService.yogaClass.findMany as jest.Mock).mockResolvedValue(
+        classes,
+      );
+
+      await expect(yogaclassService.fetchByQuery(query)).rejects.toThrow(
+        NotFoundException,
+      );
+
+      expect(parseIsoString).toHaveBeenCalledWith(query.date);
+      expect(dateRange).toHaveBeenCalledWith(query.date);
+
+      expect(prismaService.yogaClass.findMany).toHaveBeenCalledWith({
+        where: {
+          OR: [
+            { type: undefined },
+            { status: undefined },
+            {
+              date: {
+                gte: mockRange.startRange,
+                lte: mockRange.endRange,
+              },
+            },
+            { instructorId: undefined },
+            { locationId: undefined },
+          ],
+        },
+      });
+    });
+
+    it('should throw an internal server error', async () => {
+      const prismaError: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('PrismaValidationError', {
+          code: 'P2002',
+          clientVersion: 'mock-version',
+        });
+
+      const query: FetchClassesDTO = {
+        type: undefined,
+        status: undefined,
+        date: faker.date.soon(),
+        instructorId: undefined,
+        locationId: undefined,
+      };
+
+      const mockRange = {
+        startRange: new Date(query.date),
+        endRange: new Date(query.date),
+      };
+
+      (parseIsoString as jest.Mock).mockReturnValue(query.date);
+      (dateRange as jest.Mock).mockReturnValue(mockRange);
+      (prismaService.yogaClass.findMany as jest.Mock).mockRejectedValue(
+        prismaError,
+      );
+
+      await expect(yogaclassService.fetchByQuery(query)).rejects.toThrow(
+        InternalServerErrorException,
+      );
+
+      expect(parseIsoString).toHaveBeenCalledWith(query.date);
+      expect(dateRange).toHaveBeenCalledWith(query.date);
+
+      expect(prismaService.yogaClass.findMany).toHaveBeenCalledWith({
+        where: {
+          OR: [
+            { type: undefined },
+            { status: undefined },
+            {
+              date: {
+                gte: mockRange.startRange,
+                lte: mockRange.endRange,
+              },
+            },
+            { instructorId: undefined },
+            { locationId: undefined },
+          ],
+        },
+      });
+    });
+  });
+
+  describe('fetchByRange()', () => {
+    it('should fetch classes based on a date range', async () => {
+      const classes: YogaClass[] = [
+        {
+          id: faker.number.int(),
+          type: getRandomString(['ADULTS', 'CHILDREN']),
+          status: getRandomString([
+            'SCHEDULED',
+            'RESCHEDULED',
+            'DONE',
+            'CANCELLED',
+          ]),
+          date: faker.date.soon(),
+          time: faker.date.soon().toTimeString().split(' ')[0],
+          instructorId: faker.string.uuid(),
+          locationId: faker.number.int(),
+        },
+      ];
+
+      const ranges = {
+        rangeStart: faker.date.past(),
+        rangeEnd: faker.date.soon(),
+      };
+
+      const parsedStart = '2024-01-01T00:00:00.000Z';
+      const parsedEnd = '2024-01-03T23:59:59.000Z';
+
+      (parseIsoString as jest.Mock)
+        .mockReturnValueOnce(parsedStart)
+        .mockReturnValueOnce(parsedEnd);
+
+      (prismaService.yogaClass.findMany as jest.Mock).mockResolvedValue(
+        classes,
+      );
+
+      const result: EndpointReturn = await yogaclassService.fetchByRange({
+        rangeStart: ranges.rangeStart,
+        rangeEnd: ranges.rangeEnd,
+      });
+
+      expect(result).toMatchObject({
+        message: HTTP_MESSAGES.EN.yogaClass.fetchByRange.status_200,
+        data: classes,
+      });
+
+      expect(prismaService.yogaClass.findMany).toHaveBeenCalledWith({
+        where: {
+          date: {
+            gte: parsedStart,
+            lte: parsedEnd,
+          },
+        },
+      });
+
+      expect(parseIsoString).toHaveBeenCalled();
+    });
+
+    it('should throw a not found exception', async () => {
+      const classes: YogaClass[] = [];
+
+      const ranges = {
+        rangeStart: faker.date.past(),
+        rangeEnd: faker.date.soon(),
+      };
+
+      const parsedStart = '2024-01-01T00:00:00.000Z';
+      const parsedEnd = '2024-01-03T23:59:59.000Z';
+
+      (parseIsoString as jest.Mock)
+        .mockReturnValueOnce(parsedStart)
+        .mockReturnValueOnce(parsedEnd);
+
+      (prismaService.yogaClass.findMany as jest.Mock).mockResolvedValue(
+        classes,
+      );
+
+      await expect(yogaclassService.fetchByRange(ranges)).rejects.toThrow(
+        NotFoundException,
+      );
+
+      expect(prismaService.yogaClass.findMany).toHaveBeenCalledWith({
+        where: {
+          date: {
+            gte: parsedStart,
+            lte: parsedEnd,
+          },
+        },
+      });
+
+      expect(parseIsoString).toHaveBeenCalled();
+    });
+
+    it('should throw an internal server error', async () => {
+      const prismaError: PrismaClientKnownRequestError =
+        new Prisma.PrismaClientKnownRequestError('PrismaValidationError', {
+          code: 'P2002',
+          clientVersion: 'mock-version',
+        });
+
+      const ranges = {
+        rangeStart: faker.date.past(),
+        rangeEnd: faker.date.soon(),
+      };
+
+      const parsedStart = '2024-01-01T00:00:00.000Z';
+      const parsedEnd = '2024-01-03T23:59:59.000Z';
+
+      (parseIsoString as jest.Mock)
+        .mockReturnValueOnce(parsedStart)
+        .mockReturnValueOnce(parsedEnd);
+
+      (prismaService.yogaClass.findMany as jest.Mock).mockRejectedValue(
+        prismaError,
+      );
+
+      await expect(yogaclassService.fetchByRange(ranges)).rejects.toThrow(
+        InternalServerErrorException,
+      );
+
+      expect(prismaService.yogaClass.findMany).toHaveBeenCalledWith({
+        where: {
+          date: {
+            gte: parsedStart,
+            lte: parsedEnd,
+          },
+        },
+      });
+
+      expect(parseIsoString).toHaveBeenCalled();
+    });
   });
 
   describe('fetchClass()', () => {
