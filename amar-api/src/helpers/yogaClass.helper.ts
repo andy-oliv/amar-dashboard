@@ -9,9 +9,11 @@ import Role from '../interfaces/Role';
 import { findUser } from './user.helper';
 import { User } from '../interfaces/User';
 import dayjs from 'dayjs';
+import { Logger } from 'nestjs-pino';
 
 export async function checkClassExists(
   prismaService: PrismaService,
+  logger: Logger,
   classId: number,
 ) {
   try {
@@ -27,7 +29,7 @@ export async function checkClassExists(
     if (error.code === 'P2025') {
       const timestamp: string = generateTimestamp();
 
-      this.logger.error({
+      logger.error({
         message: LOGGER_MESSAGES.error.helpers.checkClassExists.notFound,
         pid: process.pid,
         timestamp,
@@ -44,6 +46,7 @@ export async function checkClassExists(
 
 export async function checkStudentExists(
   prismaService: PrismaService,
+  logger: Logger,
   classType: string,
   studentId: string,
 ) {
@@ -66,7 +69,7 @@ export async function checkStudentExists(
     if (error.code === 'P2025') {
       const timestamp: string = generateTimestamp();
 
-      this.logger.error({
+      logger.error({
         message: LOGGER_MESSAGES.error.yogaClass.addStudent.notFound,
         pid: process.pid,
         timestamp,
@@ -83,6 +86,7 @@ export async function checkStudentExists(
 
 export async function checkinstructorRoles(
   prismaService: PrismaService,
+  logger: Logger,
   instructorId: string,
 ): Promise<void> {
   const instructor: User = await findUser(prismaService, instructorId);
@@ -95,7 +99,7 @@ export async function checkinstructorRoles(
   ) {
     const timestamp: string = generateTimestamp();
 
-    this.logger.error({
+    logger.error({
       message: LOGGER_MESSAGES.error.helpers.findUser.notFound,
       pid: process.pid,
       timestamp,
