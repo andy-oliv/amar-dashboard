@@ -30,7 +30,6 @@ import LOGGER_MESSAGES from '../utils/messages/loggerMessages';
 import generateTimestamp from '../helpers/generateTimestamp';
 import * as dayjs from 'dayjs';
 import FetchClassesDTO from './dto/fetchClassesDTO';
-import FetchByRangeDTO from './dto/fetchByRangeDTO';
 import UpdateClassDTO from './dto/updateClassDTO';
 import Client from '../interfaces/Client';
 import generateMockClient from '../utils/mocks/generateMockClients';
@@ -122,6 +121,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         yogaClass.instructorId,
       );
 
@@ -172,6 +172,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         yogaClass.instructorId,
       );
     });
@@ -202,6 +203,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         yogaClass.instructorId,
       );
       expect(checkLocationById).toHaveBeenCalledWith(
@@ -238,6 +240,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         yogaClass.instructorId,
       );
       expect(checkLocationById).toHaveBeenCalledWith(
@@ -292,6 +295,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         yogaClass.instructorId,
       );
 
@@ -766,7 +770,13 @@ describe('YogaclassService', () => {
               city: true,
             },
           },
-          rollCall: true,
+          rollCall: {
+            select: {
+              id: true,
+              date: true,
+              presences: true,
+            },
+          },
           transactions: true,
         },
       });
@@ -848,7 +858,13 @@ describe('YogaclassService', () => {
               city: true,
             },
           },
-          rollCall: true,
+          rollCall: {
+            select: {
+              id: true,
+              date: true,
+              presences: true,
+            },
+          },
           transactions: true,
         },
       });
@@ -938,7 +954,13 @@ describe('YogaclassService', () => {
               city: true,
             },
           },
-          rollCall: true,
+          rollCall: {
+            select: {
+              id: true,
+              date: true,
+              presences: true,
+            },
+          },
           transactions: true,
         },
       });
@@ -1007,6 +1029,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         updatedClass.instructorId,
       );
 
@@ -1088,6 +1111,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         updatedClass.instructorId,
       );
     });
@@ -1129,6 +1153,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         updatedClass.instructorId,
       );
 
@@ -1177,6 +1202,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         updatedClass.instructorId,
       );
 
@@ -1233,6 +1259,7 @@ describe('YogaclassService', () => {
 
       expect(checkinstructorRoles).toHaveBeenCalledWith(
         prismaService,
+        logger,
         updatedClass.instructorId,
       );
 
@@ -1360,10 +1387,12 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
       expect(checkStudentExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.type,
         newStudent.id,
       );
@@ -1399,6 +1428,7 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
     });
@@ -1418,11 +1448,13 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
 
       expect(checkStudentExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.type,
         newStudent.id,
       );
@@ -1452,10 +1484,12 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
       expect(checkStudentExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.type,
         newStudent.id,
       );
@@ -1501,10 +1535,12 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
       expect(checkStudentExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.type,
         newStudent.id,
       );
@@ -1552,10 +1588,12 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
       expect(checkStudentExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.type,
         deletedStudent.id,
       );
@@ -1595,6 +1633,7 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
     });
@@ -1614,11 +1653,13 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
 
       expect(checkStudentExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.type,
         deletedStudent.id,
       );
@@ -1648,10 +1689,12 @@ describe('YogaclassService', () => {
 
       expect(checkClassExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.id,
       );
       expect(checkStudentExists).toHaveBeenCalledWith(
         prismaService,
+        logger,
         foundClass.type,
         deletedStudent.id,
       );
