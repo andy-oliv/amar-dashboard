@@ -93,6 +93,18 @@ const VALIDATION_MESSAGES = {
         },
       },
     },
+    rollCall: {
+      createRollCallDTO: {
+        classId: {
+          isNotEmpty: 'The classId field cannot be empty.',
+          isInt: 'The classId field needs to be a number.',
+        },
+        date: {
+          isNotEmpty: 'The date field cannot be empty.',
+          isDate: 'The date field must be filled with a valid date.',
+        },
+      },
+    },
     user: {
       createUserDTO: {
         name: {

@@ -1,5 +1,5 @@
 export default interface RollCall {
-  id: number;
+  id?: number;
   classId: number;
   date: Date;
 }

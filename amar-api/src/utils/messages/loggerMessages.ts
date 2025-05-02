@@ -130,6 +130,16 @@ const LOGGER_MESSAGES = {
           'An error occurred while deleting the role. Check the error log to find more information.',
       },
     },
+    rollCall: {
+      createRollCall: {
+        internalError:
+          'An error occurred while creating the roll call. Check the error log to find more information.',
+      },
+      fetchRollCalls: {
+        internalError:
+          'An error occurred while fetching the roll calls. Check the error log to find more information.',
+      },
+    },
     user: {
       createUser: {
         conflict: 'The email that was sent already exists in the database.',
@@ -254,6 +264,11 @@ const LOGGER_MESSAGES = {
       },
       fetchRole: {
         notFound: 'No role was found with the given ID.',
+      },
+    },
+    rollCall: {
+      fetchRollCalls: {
+        notFound: 'There are no roll calls to show.',
       },
     },
     user: {

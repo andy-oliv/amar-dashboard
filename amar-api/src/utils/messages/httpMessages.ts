@@ -5,15 +5,18 @@ const HTTP_MESSAGES = {
         'An unexpected error occurred. Please check the error log for more information.',
     },
     helpers: {
+      checkClassExists: {
+        status_404: 'The class was not found.',
+      },
       checkLocationById: {
         status_404: 'The location was not found.',
+      },
+      checkRollCallExists: {
+        status_409: 'This class already has a roll call.',
       },
       findUser: {
         status_404:
           'The user was not found or the user does not have permission for this task',
-      },
-      checkClassExists: {
-        status_404: 'The class was not found.',
       },
     },
     child: {
@@ -117,6 +120,15 @@ const HTTP_MESSAGES = {
 
       deleteRole: {
         status_200: 'Role successfully deleted.',
+      },
+    },
+    rollCall: {
+      createRollCall: {
+        status_201: 'Roll call successfully created.',
+      },
+      fetchRollCalls: {
+        status_200: 'Roll calls successfully found.',
+        status_404: 'There are no roll calls to show.',
       },
     },
     user: {
