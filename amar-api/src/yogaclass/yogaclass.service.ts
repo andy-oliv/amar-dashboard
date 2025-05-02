@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -34,7 +33,11 @@ export class YogaclassService {
   ) {}
 
   async createClass(classinfo: CreateClassDTO): Promise<EndpointReturn> {
-    await checkinstructorRoles(this.prismaService, classinfo.instructorId);
+    await checkinstructorRoles(
+      this.prismaService,
+      this.logger,
+      classinfo.instructorId,
+    );
 
     await checkLocationById(
       this.prismaService,
@@ -315,7 +318,13 @@ export class YogaclassService {
                 city: true,
               },
             },
-            rollCall: true,
+            rollCall: {
+              select: {
+                id: true,
+                date: true,
+                presences: true,
+              },
+            },
             transactions: true,
           },
         });
@@ -385,7 +394,11 @@ export class YogaclassService {
     }
 
     if (classData.instructorId) {
-      await checkinstructorRoles(this.prismaService, classData.instructorId);
+      await checkinstructorRoles(
+        this.prismaService,
+        this.logger,
+        classData.instructorId,
+      );
     }
 
     if (classData.locationId) {
@@ -498,10 +511,16 @@ export class YogaclassService {
   ): Promise<{ message: string }> {
     const foundClass: YogaClass = await checkClassExists(
       this.prismaService,
+      this.logger,
       classId,
     );
 
-    await checkStudentExists(this.prismaService, foundClass.type, studentId);
+    await checkStudentExists(
+      this.prismaService,
+      this.logger,
+      foundClass.type,
+      studentId,
+    );
 
     try {
       if (foundClass.type === 'ADULTS') {
@@ -569,10 +588,16 @@ export class YogaclassService {
   ): Promise<{ message: string }> {
     const foundClass: YogaClass = await checkClassExists(
       this.prismaService,
+      this.logger,
       classId,
     );
 
-    await checkStudentExists(this.prismaService, foundClass.type, studentId);
+    await checkStudentExists(
+      this.prismaService,
+      this.logger,
+      foundClass.type,
+      studentId,
+    );
 
     try {
       if (foundClass.type === 'ADULTS') {
